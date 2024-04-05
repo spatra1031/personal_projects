@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AdminHomeController">
+   <children>
+      <ImageView fx:id="imgbtn_ManageUtility" fitHeight="124.0" fitWidth="168.0" layoutX="68.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Manage_utility.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgbtn_AdminHomelogout" fitHeight="73.0" fitWidth="103.0" layoutX="274.0" layoutY="273.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/shutdown_icon.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgbtn_ManageProfiles" fitHeight="124.0" fitWidth="168.0" layoutX="403.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Manage_profile.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="91.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Manage Utility" />
+      <Text layoutX="422.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Manage Profiles" />
+      <Text layoutX="293.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Logout" />
+   </children>
+</AnchorPane>

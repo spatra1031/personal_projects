@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserSignUpController">
+    <children>
+        <Label layoutX="40.0" layoutY="67.0" text="Name:" />
+        <Label layoutX="40.0" layoutY="111.0" text="Email:" />
+        <Label layoutX="40.0" layoutY="155.0" text="Username:" />
+        <Label layoutX="40.0" layoutY="199.0" text="Password:" />
+        <Label layoutX="317.0" layoutY="67.0" text="Age:" />
+        <Label layoutX="317.0" layoutY="111.0" text="City:" />
+        <Label layoutX="317.0" layoutY="155.0" text="State:" />
+        <Label layoutX="317.0" layoutY="199.0" text="Zipcode:" />
+        <TextField fx:id="txtName" layoutX="130.0" layoutY="63.0" promptText="Enter Name" />
+        <TextField fx:id="txtEmail" layoutX="130.0" layoutY="107.0" promptText="Enter Email" />
+        <TextField fx:id="txtUsername" layoutX="130.0" layoutY="151.0" promptText="Enter Username" />
+        <PasswordField fx:id="txtPassword" layoutX="130.0" layoutY="195.0" promptText="Enter Password" />
+        <TextField fx:id="txtAge" layoutX="407.0" layoutY="63.0" promptText="Enter Age" />
+        <TextField fx:id="txtCity" layoutX="407.0" layoutY="107.0" promptText="Enter City" />
+        <TextField fx:id="txtState" layoutX="407.0" layoutY="151.0" promptText="Enter State" />
+        <TextField fx:id="txtZipcode" layoutX="407.0" layoutY="195.0" promptText="Enter Zipcode" />
+        <Button fx:id="btnBack" layoutX="142.0" layoutY="273.0" mnemonicParsing="false" onAction="#handleBackButton" text="Back" />
+        <Button fx:id="btnClear" layoutX="258.0" layoutY="273.0" mnemonicParsing="false" onAction="#handleClearButton" text="Clear" />
+        <Button fx:id="btnRegister" layoutX="380.0" layoutY="273.0" mnemonicParsing="false" onAction="#handleRegisterButton" text="Register" />
+    </children>
+</AnchorPane>
