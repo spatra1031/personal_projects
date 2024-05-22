@@ -45,4 +45,4 @@ if __name__ == "__main__":
     splitDF.write.format("parquet").mode("overwrite").save("80.parquet")
     splitDF.show(truncate=False)
 
-    spark.stop()
+    spark.stop()..
