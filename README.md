@@ -1,16 +1,15 @@
-
-**Welcome to My Personal Projects Repository! 📚🚀**
+# Welcome to My Personal Projects Repository! 📚🚀
 
 Hi there! I'm Surajit Patra, and this is a collection of my personal projects that showcase my skills and interests in various domains, from data analytics to AI-powered applications. Explore the projects below to see what I've been working on!
 
-**Projects Overview**
+# Projects Overview
 
-**BookSearchApp**
+# BookSearchApp
 Directory: BookSearchApp/BookSearchApp-main
 
 Description: A dynamic application that allows users to search for books using various filters and criteria. This project highlights my skills in creating user-friendly interfaces and integrating APIs to fetch and display book data.
 
-**API Projects**
+# API Projects
 Directory: api_projects
 
 Fast API - Instagram Clone: fast_api/instagram
@@ -21,12 +20,12 @@ REST API - Messaging and Profile Service: rest_api/message service/profile servi
 
 Description: A comprehensive messaging service API that includes user profiles. This project showcases my expertise in designing and implementing RESTful services, managing data persistence, and ensuring secure communication between users.
 
-**Java Projects**
+# Java Projects
 Directory: java_projects/UtilityManagement
 
 Description: A utility management system developed in Java. This project focuses on efficiently managing resources and utilities, highlighting my skills in object-oriented programming and software development in Java.
 
-**Spark Projects**
+# Spark Projects
 Directory: spark_projects
 
 Divvy Trips: divvy_trips
