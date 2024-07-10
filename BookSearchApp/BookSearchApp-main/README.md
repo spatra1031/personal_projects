@@ -1,4 +1,5 @@
-#BookSearchApp
+# BookSearchApp
+
 Objective
 The BookSearchApp aims to provide users with an intuitive and efficient way to search for books and retrieve detailed information using the Google Books API. The app offers a streamlined user experience to find books by title or author and displays comprehensive details about each book, including the cover image, authors, publication year, ISBN, and more.
 
