@@ -1,5 +1,6 @@
 
 **Welcome to My Personal Projects Repository! 📚🚀**
+
 Hi there! I'm Surajit Patra, and this is a collection of my personal projects that showcase my skills and interests in various domains, from data analytics to AI-powered applications. Explore the projects below to see what I've been working on!
 
 **Projects Overview**
