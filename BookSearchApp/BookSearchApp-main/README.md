@@ -34,8 +34,11 @@ Configure the environment variables with your Google Books API key.
 Run the app using streamlit run booksearchapp.py.
 
 git clone https://github.com/yourusername/BookSearchApp.git
+
 cd BookSearchApp
+
 pip install -r requirements.txt
+
 streamlit run booksearchapp.py
 
 Feel free to reach out if you have any questions or suggestions!
