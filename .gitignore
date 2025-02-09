@@ -1,3 +1,5 @@
 .venv
 .myenv
 *.mp4
+*.streamlit
+*secrets.toml
