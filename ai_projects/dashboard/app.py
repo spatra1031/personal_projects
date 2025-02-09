@@ -13,9 +13,13 @@ st.set_page_config(page_title="Data Analysis with OpenAI", layout="wide")
 # OpenAI API Key from Streamlit Secrets
 openai.api_key = st.secrets["openai"]["api_key"]
 
-# Function to generate SQL query and chart types using OpenAI
 def generate_sql_query_and_chart(data, user_input):
-    prompt = f"Here is the data schema:\n{data.dtypes.to_string()}\nUser input: {user_input}\nGenerate a SQL query to analyze the data based on the user input. Use the table name 'data' and include only the SQL query without any additional explanation. Additionally, suggest multiple chart types (bar chart, line chart, pie chart, scatter plot) to visualize the result."
+    prompt = f"""
+    Here is the data schema:
+    {data.dtypes.to_string()}
+    User input: {user_input}
+    Generate a SQL query to analyze the data based on the user input. Use the table name 'data' and include only the SQL query without any additional explanation. Additionally, suggest multiple chart types (bar chart, line chart, pie chart, scatter plot) to visualize the result. Note: Adjust SQL for SQLite syntax, e.g., use strftime for date functions.
+    """
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -47,16 +51,15 @@ def generate_sql_query_and_chart(data, user_input):
                 return None, None
 
             return sql_query, chart_types
-        except openai.error.RateLimitError as e:
-            if attempt < max_retries - 1:
+        except Exception as e:  # Catch all exceptions
+            st.error(f"An error occurred: {e}")
+            if "rate limit" in str(e).lower() and attempt < max_retries - 1:
                 st.warning(f"Rate limit exceeded. Retrying... (Attempt {attempt + 1}/{max_retries})")
                 time.sleep(5)  # Wait for 5 seconds before retrying
             else:
-                st.error(f"Rate limit exceeded. Please try again later. Error: {e}")
+                st.error(f"Error details: {e}")
                 return None, None
-        except openai.error.InvalidRequestError as e:
-            st.error(f"Invalid request. Error: {e}")
-            return None, None
+
 
 # Function to execute SQL query on DataFrame
 def execute_sql_query(df, query):
@@ -69,6 +72,10 @@ def execute_sql_query(df, query):
 # Function to plot data based on the suggested chart types
 def plot_data(df, chart_types):
     for chart_type in chart_types:
+        if len(df.columns) < 2:
+            st.write(f"Chart type '{chart_type}' requires at least two columns in the data.")
+            continue
+        
         fig, ax = plt.subplots()
         if chart_type.lower() == 'bar chart':
             df.plot(kind='bar', x=df.columns[0], y=df.columns[1], ax=ax)
