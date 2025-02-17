@@ -3,6 +3,13 @@ import numpy as np
 import serial
 import time
 import json
+import os
+import arcpy
+import subprocess
+
+command = r'"C:\Program Files\ArcGIS\Pro\bin\Python\envs\arcgispro-py3\python.exe" my_script.py'
+subprocess.run(command, shell=True)
+
 from util import get_parking_spots_bboxes, empty_or_not
 
 def calc_diff(im1, im2):
@@ -178,7 +185,75 @@ while ret:
         break
 
     frame_nmr += 1
+# Set up the shapefile path
+shapefile = r"D:\my_work\personal_projects\ai_projects\parking_lot_monitoring\parking_spots.shp"  # Specify your output shapefile path
+
+# Check if the shapefile exists and delete it if so
+if arcpy.Exists(shapefile):
+    arcpy.Delete_management(shapefile)
+
+# Create a new shapefile with a polygon geometry type
+arcpy.CreateFeatureclass_management(
+    out_path=os.path.dirname(shapefile), 
+    out_name=os.path.basename(shapefile),
+    geometry_type="POLYGON",
+    spatial_reference=arcpy.SpatialReference(4326)  # WGS 84 coordinate system
+)
+
+# Add a field for the label (name of the parking spot)
+arcpy.AddField_management(shapefile, "Label", "TEXT")
+
+# Create an insert cursor to add features (parking spots) to the shapefile
+cursor = arcpy.da.InsertCursor(shapefile, ["SHAPE@", "Label"])
+
+previous_frame = None
+frame_nmr = 0
+step = 30
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    if frame_nmr % step == 0 and previous_frame is not None:
+        for spot_indx, spot_info in enumerate(labelled_spots):
+            col, row, spot = spot_info
+            x1, y1, w, h = spot
+            spot_crop = frame[y1:y1 + h, x1:x1 + w, :]
+            diffs[spot_indx] = calc_diff(spot_crop, previous_frame[y1:y1 + h, x1:x1 + w, :])
+
+    if frame_nmr % step == 0:
+        arr_ = [j for j in np.argsort(diffs) if diffs[j] / np.amax(diffs) > 0.4]
+        for spot_indx in arr_:
+            col, row, spot = labelled_spots[spot_indx]
+            x1, y1, w, h = spot
+
+            spot_crop = frame[y1:y1 + h, x1:x1 + w, :]
+
+            spot_status = empty_or_not(spot_crop)
+
+            # Create a polygon for the parking spot (bounding box)
+            polygon = arcpy.Polygon(arcpy.Array([arcpy.Point(x1, y1),
+                                                 arcpy.Point(x1 + w, y1),
+                                                 arcpy.Point(x1 + w, y1 + h),
+                                                 arcpy.Point(x1, y1 + h)]))
+
+            # Insert the polygon and label into the shapefile
+            cursor.insertRow([polygon, f"{col}{row}"])
+
+    if frame_nmr % step == 0:
+        previous_frame = frame.copy()
+
+    frame_nmr += 1
 
 cap.release()
 cv2.destroyAllWindows()
-#ser.close()
+
+# Delete the cursor after finishing
+del cursor
+
+# Check if the shapefile was created successfully
+if arcpy.Exists(shapefile):
+    print(f"Shapefile created successfully: {shapefile}")
+else:
+    print(f"Error: Shapefile was not created.")
