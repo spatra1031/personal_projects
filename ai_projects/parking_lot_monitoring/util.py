@@ -1,5 +1,5 @@
 import pickle
-
+import os
 from skimage.transform import resize
 import numpy as np
 import cv2
@@ -9,7 +9,6 @@ EMPTY = True
 NOT_EMPTY = False
 
 MODEL = pickle.load(open("parking_model.p", "rb"))
-
 
 def empty_or_not(spot_bgr):
 
