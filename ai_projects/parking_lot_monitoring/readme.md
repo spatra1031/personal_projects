@@ -11,7 +11,7 @@ An AI-powered Parking Lot Monitoring System utilizing computer vision to detect 
 ## 1. Raw Video Footage
 This project processes live video footage of a parking lot to detect available parking spots.
 
-Example Screenshot:
+![raw](images/raw.png)
 
 ## 2. AI-Based Parking Spot Detection
 Trained an SVM classifier to classify parking spots as empty or occupied.
@@ -27,7 +27,7 @@ Saved the best model using pickle for later inference
 ### AI Model Detecting Spots in Video
 Once trained, the model detects parking spots in real-time video footage.
 
-Example Screenshot:
+![output](images/parking_output.png)
 
 ## 3. External Display for Parking Guidance
 An ESP32-based external display is integrated to show real-time parking availability, helping drivers find spots easily.
@@ -39,7 +39,7 @@ Displays real-time availability on an LED screen for drivers at the parking entr
 AI Model Detecting Spots in Video
 Once trained, the model detects parking spots in real-time video footage.
 
-Example Screenshot:
+![esp32](images/esp32.jpg)
 
 ## 4. Integration with ArcGIS for Spatial Visualization
 To enhance visualization, ArcGIS Feature Layers display parking spot availability on a web-based GIS application.
@@ -50,7 +50,8 @@ Updated Feature Layers dynamically with real-time occupancy data
 Real-time Status Updates
 Bound each parking spot’s status (empty/occupied) to GIS attributes
 Enabled real-time visualization on ArcGIS Online
-Example Screenshot:
+
+![gis](images/gis.png)
 
 ## 5. Real-World Impact
 This project solves a common urban problem—finding an available parking spot.
