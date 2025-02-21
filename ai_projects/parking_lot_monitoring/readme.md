@@ -51,6 +51,8 @@ Real-time Status Updates
 Bound each parking spot’s status (empty/occupied) to GIS attributes
 Enabled real-time visualization on ArcGIS Online
 
+Although the location is not exactly the same as shown in the video since it was difficult to get the exact coordinates of the parking lot, a testing location was selected for proof of concept.
+
 ![gis](images/gis.png)
 
 ## 5. Real-World Impact
