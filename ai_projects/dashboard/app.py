@@ -3,9 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import openai
 import sqlite3
-from io import StringIO
 import time
 import re
+from io import StringIO
+
 
 # Set the page configuration
 st.set_page_config(page_title="Data Analysis with OpenAI", layout="wide")

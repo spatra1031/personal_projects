@@ -1,0 +1,292 @@
+---
+title: "Lab03_ITMD514_Patra_Surajit"
+author: "Surajit Patra"
+date: "2024-09-30"
+output: html_document
+---
+
+# Probability basics
+# Sampling Distributions of sums and means
+# Normal Distribution
+# Sampling Distribution of the Sample Mean from a Normal population
+# Law of Large Numbers (LLN)
+# Central Limit Theorem (CLT) and the Sampling Distribution of the 
+# Sample Mean from a non-Normal population
+
+# We will use the sample function extensively so let's look at its documentation
+```{r}
+?sample
+help(sample)
+library(tidyverse)
+```
+###################################################################################
+####################### Example 1: A coin experiment ##############################
+###################################################################################
+```{r}
+par(mfrow=c(1,1))
+n = 6 #10 #100 #1000 #100000 # number of random experiments; coin flips
+x = c(0,1) # sample space for creating a distribution; 0: tails; 1:heads
+coin.flips = sample(x, size=n, prob = c(0.2, 0.8), replace=TRUE)
+coin.flips
+barplot(table(coin.flips)) #plot frequencies 
+barplot(table(coin.flips)/n) #plot relative frequency
+```
+
+
+Comment: With a fair coin (p = 0.5), the relative frequency of heads and tails fluctuates around 0.5, but with small sample size (n=6), the proportions can vary significantly (e.g., 3 heads and 3 tails, or 4 heads and 2 tails).
+
+With a biased coin (p = 0.8), the relative frequency of heads is expected to be higher. For n = 6, you might get 5 or 6 heads frequently. The variability is still high due to the small sample size, but the distribution skews towards more heads.
+
+# with n=6 coins, we sometimes get 50/50 heads/tails, i.e. sample proportion = .5
+# but not always.
+# The larger n gets, the more likely we are to observe sample proportion = population proportion.
+# experiment by trying different n values above
+
+#We do this below for 6 values of n
+```{r}
+par(mfrow=c(2,3))
+x = c(0,1) # sample space for creating a distribution; 0: tails; 1:heads
+for (n in c(6,10,30,100,1000,10000)) {
+  coin.flips <- sample(x, size=n, prob = c(0.2, 0.8), replace=TRUE)
+  barplot(table(coin.flips)/n, main=paste("n=",n), ylab="Frequency", ylim = c(0,1)) #plot relative frequency
+}
+par(mfrow=c(1,1))
+```
+
+
+Comment: For n = 6 and 10, the relative frequency of heads fluctuates around 0.5, but there is a lot of variability. As n increases to 100, 1000, and 10000, the relative frequency stabilizes around 0.5.
+
+For n = 6 and 10, the proportion of heads is often closer to 0.8, but still has variability. As n increases to 100, 1000, and 10000, the distribution converges to 0.8.
+
+#
+# At Homework problem: simulate and plot the sample proportions of the coin flips for 
+# your biased coin
+########################################################
+# Now let us calculate a different statistic; the number of heads
+```{r}
+n = 10 #10 #100 #1000 #100000 # number of random experiments; coin flips
+x = c(0,1) # sample space for creating a distribution; 0: tails; 1:heads
+coin.flips = sample(x, size=n, prob = c(0.2, 0.8), replace=TRUE)
+Y = sum(coin.flips) # num of heads; a statistic; a function of the data
+Y
+```
+Comment: The number of heads (Y) varies around 5 for a fair coin (since p = 0.5 and 10 * 0.5 = 5).
+
+For a biased coin (p = 0.8), Y is expected to be around 8 (since 10 * 0.8 = 8).
+
+```{r}
+N=2000 #100 #1000 #10000
+# Repeat the experiment of flipping a coin n times
+# and recording the number of heads N times
+# i.e. draw N samples of size n each from the fair coin distribution
+
+num.heads.in.N.tries = replicate(
+  N,
+  sum(sample(x, size=n, prob = c(0.2, 0.8), replace=TRUE))
+)
+num.heads.in.N.tries
+# let us see the average number of heads in N tries
+mean(num.heads.in.N.tries)
+# visualize the distribution of Y
+table(num.heads.in.N.tries)
+# plot num of heads
+barplot(table(num.heads.in.N.tries))
+```
+
+Comment: With N = 2000, the mean number of heads stabilizes around 5 for a fair coin.
+
+With p = 0.8, the mean number of heads stabilizes around 8.
+
+# As sample size grows, distribution should look more like normal curve.
+```{r}
+x=c(0,1)
+par(mfrow=c(3,3))
+for (n in c(6,10,500)) {
+  for (N in c(20*n,50*n,200*n)) {
+    temp.num.heads = replicate(N, sum(sample(x, size=n, prob = c(0.2, 0.8), replace=TRUE)))
+    barplot(table(temp.num.heads),main = paste("n=",n,"; N=", N), ylab=paste("Frequency #Heads"), xlab=paste("Sampling Distribution; n:#coins; N:#reps\n Mean = ", mean(temp.num.heads), "; std=", sd(temp.num.heads)))
+  }
+}
+```
+
+Comment: For small n, the distribution is more spread out. As N and n increase, the distribution becomes more concentrated around 5.
+
+The distribution is centered around 8 instead of 5. As n and N increase, it becomes more concentrated around 8.
+
+# We do need N to be large enough to be able to simulate enough of the sampling distribution though
+# If N is too small, you don't have enough samples to see the probability structure of the sampling distribution of Y 
+# Compare these plots to what you already saw in the prior exercise
+```{r}
+for (n in c(6,10,500)) {
+  for (N in c(100,1000,10000)) {
+    temp.num.heads = replicate(N, sum(sample(x, size=n, prob = c(0.2, 0.8), replace=TRUE)))
+    barplot(table(temp.num.heads),main = paste("n=",n,"; N=", N), ylab=paste("Frequency #Heads"), xlab=paste("Sampling Distribution; n:#coins; N:#reps\n Mean = ", mean(temp.num.heads), "; std=", sd(temp.num.heads)))
+  }
+}
+```
+
+# Let us now use this to visualize the sample mean sampling distribution
+```{r}
+N = 10000
+par(mfrow=c(1,3))
+for (n in c(6,10,500)) {
+    temp.prop.heads = replicate(N, sum(sample(x, size=n, prob = c(0.2,0.8), replace=TRUE))/n)
+    barplot(table(temp.prop.heads),main = paste("n=",n,"; N=", N), ylab=paste("Relative Frequency of Sample Proportion of Heads"), xlab=paste("Sampling Distribution of Sample Proportion of Heads\n Mean = ", round(mean(temp.prop.heads),digits=4), "; std=", round(sd(temp.prop.heads),digits=4)))
+}
+par(mfrow=c(1,1))
+```
+
+Comment: The sample mean stabilizes around 0.5 as N and n increase.
+
+The sample mean stabilizes around 0.8, indicating a higher probability of heads.
+
+# Homework: Repeat this example with your unfair coin. Compare annd contrast your results
+
+Comment: For a biased coin with probablity 0.8 the distribution of the heads is more which means that it is biased towards heads. For a fair coin with heads 0.5 the distribution of heads is symmetric which means that tehre is a 50/50 chance of getting a head or a tail.
+
+For A biased coin most of the sample proportions will be around 2/3 which means out of 3 flips most will be heads and for a fair coin it will be 50/50 chance of getting a head or a tail.
+
+
+###################################################################################
+####################### Example 2: A u-shaped distribution ########################
+###################################################################################
+# Simulating u-shaped distribution; Sampling Distribution of Sample Mean for a non-nornal r.v.
+```{r}
+n = 10 #sample size
+current.sample = sample(1:7,prob=c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495 ),size=n,replace=TRUE)
+current.sample
+table(current.sample) #frequency table for current sample.
+#investigate the sample mean and sample deviation for this sample
+x_bar = mean(current.sample)
+x_bar
+sd(current.sample)
+```
+# To get a good snapshot of the distribution, and see that it is u-shaped, use a large n, i.e, n=10000
+```{r}
+n = 10000 #sample size
+current.sample = sample(1:7,prob=c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495 ),size=n,replace=TRUE)
+```
+#investigate the sample mean and sample deviation for this sample
+```{r}
+x_bar = mean(current.sample) 
+x_bar
+sd(current.sample)
+barplot(table(current.sample)/n) #symmetric, but u-shaped distribution
+```
+
+#population mean, i.e expected value
+```{r}
+sum(c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495 ))
+exp_val = sum(1:7*c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495 )) # true expected value of r.v. 
+exp_val # what is the difference between exp_val and x_bar?
+```
+
+Answer- x_bar= is the mean of a specific sample drawn from the population and exp_val= is the true mean of the population.
+
+#calculate variance, and standard deviation and save then as var_val and sd_val - homework/lab 3
+```{r}
+pmf <- c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495) # probability mass function
+values <- 1:7 # values for the random variable
+var_val <- sum(pmf * (values - exp_val)^2) # variance calculation
+sd_val <- sqrt(var_val) # standard deviation
+var_val
+sd_val
+```
+# Investigate the Sampling Distribution of sample mean of a sample of size n from pmf of u-shaped distribution
+```{r}
+par(mfrow=c(1,1))
+N=1000# samples in sampling distribution
+```
+#Generate 3 samples of size n
+```{r}
+samples = replicate(3, sample(1:7,prob=c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495 ),size=n,replace=TRUE))
+samples
+```
+#calculate the 3 sample means for these samples
+```{r}
+mean(samples[,1])
+mean(samples[,2])
+mean(samples[,3])
+```
+#simulate 3 sample means
+```{r}
+samples.means<- replicate(3, mean(sample(1:7,prob=c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495 ),size=n,replace=TRUE)))
+samples.means
+```
+#find their average, variance, and standard deviation
+```{r}
+mean.of.means = mean(samples.means)
+mean.of.means
+sd.of.means = sd(samples.means)
+sd.of.means
+```
+#compare to the standard deviation of the samples themselves
+```{r}
+sd(samples[,1])
+sd(samples[,2])
+sd(samples[,3])
+```
+
+#Simulate a sampling distribution of the sample mean from N samples of size n
+```{r}
+N=10000 #3
+n=30
+sample.mean.distr = replicate(N, mean(sample(1:7,prob=c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495 ),size=n,replace=TRUE)))
+sample.mean.distr
+hist(sample.mean.distr,main = paste("Sampling Distribution of Sample Mean \n n=",n,"; N=", N), ylab=paste("Frequency Mean"), xlab=paste("n:sample size\n Mean = ", round(mean(sample.mean.distr),digits=4), "; std=", round(sd(sample.mean.distr),digits=4)))
+mean.of.means = mean(sample.mean.distr)
+mean.of.means
+sd.of.means = sd(sample.mean.distr)
+sd.of.means
+```
+# overlay the normal distribution density curve; (recall the Central Limit Theorem) 
+```{r}
+hist(sample.mean.distr,main = paste("Sampling Distribution of Sample Mean \n n=",n,"; N=", N), ylab=paste("Relative Frequency"), xlab=paste("n:sample size\n Mean = ", round(mean(sample.mean.distr),digits=4), "; std=", round(sd(sample.mean.distr),digits=4)), freq = FALSE)
+curve(dnorm(x, exp_val, sd_val/sqrt(n)), from=-3, to=11, add=TRUE) 
+```
+# What happens as n gets larger? 
+# (We do also need N to be large enough to see enough of the distribution; 10K is usually sufficient)
+```{r}
+par(mfrow=c(3,3))
+for (n in c(10,50,200)) {
+  for (N in c(20*n,50*n,200*n)) {
+    sample.mean.distr = replicate(N, mean(sample(1:7,prob=c(0.3495,0.1,0.05,0.001, 0.05,0.1,0.3495 ),size=n,replace=TRUE)))
+    hist(sample.mean.distr,main = paste("Sampling Distribution Xbar \n n=",n,"; N=", N),  xlab=paste("Overall Mean = ", round(mean(sample.mean.distr),digits=4), "\n std=", round(sd(sample.mean.distr),digits=4)))
+  }
+}
+```
+####################################################################################
+## Example 3: Sampling Distribution of the sample mean from a normal distribution ##
+####################################################################################
+# Sampling distribution for a sample mean for Normal Distribution
+# Recall that for a normal distribution, the sample mean is always normally distributed for any sample size
+# with mean the population mean (mu) and variance the population variance divided by sqrt(n), sigma^2/sqrt(n)
+
+# This is true even for sample size = 1 (the original normal distribution, mean=mu and sd=sigma) or 
+# sample size = 2 (not the original but already still normally distributed, with mean mu and sd=sigma/sqrt(2))
+```{r}
+par(mfrow=c(1,1))
+mu_normal = 4
+sd_normal = 2
+N = 10000
+```
+#Draw N points from the normal distribution
+```{r}
+normal_sample = rnorm(n=N,mean=mu_normal, sd= sd_normal) #Allows us to draw random samples from a normal distribution
+normal_sample
+hist(normal_sample, main = "Sampling Distribution for Normal Data\n mu=4, sigma=2, n=1", freq = FALSE, xlab="x values")
+curve(dnorm(x, 4, 2), from=-4, to=12, add=TRUE) 
+
+
+par(mfrow=c(2,2))
+N=10000
+mu_normal = 4
+sd_normal = 2
+for (n in c(1,2,5,30)){
+  sample.mean.distr.normal = replicate(N, mean(rnorm(n,mean=mu_normal, sd= sd_normal)))
+  hist(sample.mean.distr.normal, main = paste("Sampling Distribution\n n=",n),  xlab=paste("Overall Mean = ", round(mean(sample.mean.distr.normal),digits=4), "\n std=", round(sd(sample.mean.distr.normal),digits=4)))
+  curve(dnorm(x, 4, 2/sqrt(n)), from=-5, to=13, add=TRUE) 
+}
+```
+# You should see all sampling distributions centered at the overall mean, which should be approximately mu=4
+# And the standard error being approximately  

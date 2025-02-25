@@ -1,0 +1,139 @@
+---
+title: "ITMD514_05  Lab 1"
+author: "Surajit Patra"
+date: ""
+output: html_document
+---
+
+
+```{r}
+# We will require the tidyverse library. If you do not already have it installed type the following command to do so in the Console; or follow RStudio prompts to install
+# install.packages("tidyverse")
+# The following loads the library for our use
+library(tidyverse) 
+```
+
+### 1. Changing the author field and file name.
+
+##### (a) Change the `author:` field on the Rmd document from Your Name Here to your own name.
+
+##### (b) Rename this file to "lab01_ClassAndSectionNumber_LastName_FirstName_.Rmd", where your info is updated accordingly; e.g. "lab01_STAT514_01_Smith_John.Rmd
+### 2.  Hello World!
+
+The following R code chunk prints the text 'Hello world!'.
+
+```{r}
+print("Hello world!")
+```
+
+#### (a) Modify the code chunk below to print your name
+```{r}
+print("Surajit Patra")
+```
+
+<br>
+
+### 3.  Creating sequences
+The `c()` operator allows you to form a vector from its arguments.  If we're trying to build a vector containing a sequence of numbers, there are several useful functions at our disposal.  These are the colon operator `:` and the sequence function `seq()`.
+
+##### `:` Colon operator: 
+```{r}
+1:19 # Numbers 1 to 10
+394:415 # Numbers 394 to 415
+```
+
+##### `seq` function: `seq(from, to, by)`
+```{r}
+seq(1,25,1) # All integers from 1 to 25
+seq(1,25,2) # Odd integers from 1 to 25
+seq(2,25,2) # Even integers from 2 to 25
+```
+
+> To learn more about a function, type `?functionname` into your console.  E.g., `?seq` pulls up a Help file with the R documentation for the `seq` function.
+
+#### (a) Use the operator `:` to output the sequence of numbers from 3 to 48
+```{r}
+3:48
+```
+
+#### (b) Use the `seq()` method to output the sequence of numbers from 3 to 48 in increments of 3
+```{r}
+seq(3,48,3)
+```
+
+#### (c) Save the sequence from (a) as a variable `x`, and the sequence from (b) as a variable `y`.  Output their product `x*y`
+```{r}
+x <- 3:48
+y <- seq(3, 48, 3)
+print(x*y)
+```
+
+<br>
+
+### 4. Cars data
+
+First basic example of data frames and plotting.
+
+In this example you will explore a very simple, classic dataset.  The `cars` data comes with the default installation of R. Let us find out more about this dataset.
+```{r}
+?(cars)
+```
+So we can see this is a data frame, with 50 observations on 2 variables. To peek into the few observations use the command `head(cars)`.
+
+```{r}
+head(cars)
+```
+
+To access the variables speed and dist of cars, we can use `cars[,1]', or `cars$speed'.
+
+```{r}
+speed_cars <- cars[,1]
+dist_cars <- cars[,2]
+```
+
+One could also use the `attach()` command to allow access to `speed` and `dist` as though they were vectors in one's own workspace. Use `?attach' to read about why this is not good practice.
+
+```{r}
+?attach
+```
+
+#### (a) Calculate the average, variance, and standard deviation of the speed and distance variables of the cars dataset, and save them in appropriately named variables.
+```{r}
+# average distance of cars
+average_dist <- mean(dist_cars)
+print(average_dist)
+
+# average speed of cars
+average_speed <- mean(speed_cars)
+print(average_speed)
+
+# variance distance of cars
+variance_dist <- var(dist_cars)
+print(variance_dist)
+
+# variance speed of cars
+variance_speed <- var(speed_cars)
+print(variance_speed)
+
+# standard deviation of distance of cars
+standarddev_dist <- sd(dist_cars)
+print(standarddev_dist)
+
+# standard deviation of speed of cars
+standarddev_speed <- sd(speed_cars)
+print(standarddev_speed)
+```
+
+<br>
+
+<br>  We will produce a histogram of stopping distance using the `qplot` function. (Note that this method is deprecated, but we will use it in this first assignment due to its simplicity)
+```{r}
+qplot(dist_cars) # Histogram of stopping distance
+```
+
+The `qplot(x,y,...)` function can also be used to plot a vector `y` against a vector `x`.  As always, type `?qplot` into the Console to learn more about the basic qplot function. 
+
+#### (b) Use the `qplot(x,y)` function to create a scatterplot of dist_cars against speed_cars.
+```{r}
+qplot(dist_cars, speed_cars)
+```

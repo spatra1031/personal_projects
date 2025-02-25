@@ -1,0 +1,521 @@
+---
+title: "Lab04_ITMD514_05_Patra_Surajit"
+author: "Surajit Patra"
+date: "2024-11-03"
+output: html_document
+---
+
+```{r}
+library(ISLR2)# library(ISLR2)
+library(tidyverse)
+data("Auto")
+head(Auto)
+```
+
+# Part I (6pts)  - Exercise 9 from section 2.3 or the intro to statistical learning book, v2, p56. 
+Q1. Exercise 9, Section 2.4
+Read Section 2.3 from ISLv2. Retrieve the exercise from the book, though I provide it here for ease of access.
+
+This exercise involves the Auto data set studied in the lab. Make sure that the missing values have been removed from the data.
+
+(a)  Which of the predictors are quantitative, and which are qualitative?
+```{r}
+quantitative_predictors <- c("mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year" )
+qualitative_predictors <- c("name", "origin")
+```
+
+Ans- The quantitative predictors are - mpg, cylinders, displacement, horsepower, weight, acceleration, and  year. 
+
+Qualitative predictors are - name and origin.
+
+(b)  What is the range of each quantitative predictor? You can answer this using the range() function. 
+```{r}
+range_quantitative <- sapply(Auto[, quantitative_predictors], range)
+print(range_quantitative)
+```
+
+(c)  What is the mean and standard deviation of each quantitative predictor?
+
+```{r}
+# mean of each quantitative predictor
+mean_quantitative <- sapply(Auto[,quantitative_predictors], mean)
+print(mean_quantitative)
+```
+```{r}
+# standard dev of each quantitative predictor
+stddev_quantitative <- sapply(Auto[,quantitative_predictors], sd)
+print(stddev_quantitative)
+```
+
+(d)  Now remove the 10th through 85th observations. What is the range, mean, and standard deviation of each predictor in the subset of the data that remains?
+
+```{r}
+Auto <- na.omit(Auto)
+subset_Auto <- Auto[-(10:85), ]
+range_subset <- sapply(subset_Auto[, quantitative_predictors], range)
+print(range_subset)
+```
+```{r}
+mean_subset <- sapply(subset_Auto[, quantitative_predictors], mean)
+print(mean_subset)
+```
+```{r}
+stddev_subset <- sapply(subset_Auto[, quantitative_predictors], sd)
+print(stddev_subset)
+```
+
+(e)  Using the full data set, investigate the predictors graphically, using scatterplots or other tools of your choice. Create some plots highlighting the relationships among the predictors. Comment on your findings.
+
+```{r}
+
+# Scatterplot to show Horsepower vs MPG
+ggplot(
+  data = Auto, 
+  aes(x= horsepower, y= mpg))+
+  geom_point(color = "steelblue")+ 
+labs(title = "Horsepower vs MPG")
+```
+
+Ans- In this scatterplot we can see a negative trend and can see that when the horsepower of a car increases the MPG of a car decreases.
+
+```{r}
+# Scatterplot to show Horsepower vs Acceleration
+ggplot(
+  data = Auto, 
+  aes(x= horsepower, y= acceleration))+
+  geom_point(color = "lightgreen")+ 
+labs(title = "Horsepower vs Acceleration")
+```
+
+Ans- In this scatterplot we can see a negative trend and can see that when the horsepower of a car increases the acceleration time of a car is decreases.
+
+```{r}
+# Scatterplot to show Weight vs MPG
+ggplot(
+  data = Auto, 
+  aes(x= weight, y= mpg))+
+  geom_point(color = "red")+ 
+labs(title = "Weight vs MPG")
+```
+
+Ans- In this scatterplot we can see a negative trend and can see that when the weight of a car increases the MPG of a car is decreases.
+
+```{r}
+# Scatterplot to show Cylinders vs Displacement
+ggplot(
+  data = Auto, 
+  aes(x= cylinders, y= displacement))+
+  geom_point(color = "yellow")+ 
+labs(title = "Cylinders vs Displacement")
+```
+
+Ans- In this scatterplot we can see a positive trend and can see that when the displacement of a car increases as the number of cylinders increases.
+
+```{r}
+# Scatter plot to show Weight vs Acceleration
+ggplot(
+  data = Auto, 
+  aes(x= weight, y= acceleration))+
+  geom_point(color = "orange")+ 
+labs(title = "Weight vs Acceleration")
+```
+
+Ans- In this scatterplot we can see that most of the cars with less weight took more time to accelerate where as cars with more weight took less time. This could also mean that the power to weight ratio of the light weight cars are not good as compared to the cars with more weight.
+
+```{r}
+# Scatter plot to show Cylinders vs Acceleration
+ggplot(
+  data = Auto, 
+  aes(x= cylinders, y= acceleration))+
+  geom_point(color = "pink")+ 
+labs(title = "Cylinders vs Acceleration")
+```
+
+Ans- In this scatterplot we can see a negative trend where as the number of cylinders increases the acceleration time start to decrease.
+
+```{r}
+# Scatterplot to show Origin vs mpg
+ggplot(
+  data = Auto, 
+  aes(x = origin, y = mpg)) +
+  geom_point(color = "purple") + 
+  labs(title = "Origin vs MPG")
+```
+
+Ans- In this scatter plot a positive trend can be seen where Origin of cars are (1. American, 2. European, 3. Japanese) and it can be seen that Japanese cars give better MPG followed by European cars and then American Cars.
+
+(f) Suppose that we wish to predict gas mileage (mpg) on the basis of the other variables. Do your plots suggest that any of the other variables might be useful in predicting mpg? Justify your answer.
+
+```{r}
+# Scatterplot to show horsepower vs mpg
+ggplot(
+  data = Auto, 
+  aes(x = horsepower, y = mpg)) +
+  geom_point(color = "red") + 
+  labs(title = "Horsepower vs MPG")
+```
+
+Ans- In this scatter plot, we can see a negative trend and it can be seen that if a car has more horsepower the car consumes more fule so the MPG starts to decrease.
+
+```{r}
+# Scatterplot to show displacement vs mpg
+ggplot(
+  data = Auto, 
+  aes(x = displacement, y = mpg)) +
+  geom_point(color = "green") + 
+  labs(title = "Displacement vs MPG")
+```
+
+Ans- In this scatter plot, it can be seen that it has a negative trend and if a car has more displacement that is the amount of fuel a car can hold in its cylinders during the maximum power generation the car consumes more fule so as the displacement increases the MPG decreases.
+
+```{r}
+# Scatterplot to show cylinders vs mpg
+ggplot(
+  data = Auto, 
+  aes(x = cylinders, y = mpg)) +
+  geom_point(color = "blue") + 
+  labs(title = "Cylinders vs MPG")
+```
+
+Ans- In this scatter plot, it can be seen that it has a negative trend and if a car has more number of cylinders it burns more fuel in each cylinder so as the number of cylinders increase the MPG is decreases.
+
+```{r}
+# Scatterplot to show weight vs mpg
+ggplot(
+  data = Auto, 
+  aes(x = weight, y = mpg)) +
+  geom_point(color = "yellow") + 
+  labs(title = "Weight vs MPG")
+```
+
+Ans- In this scatter plot, it can be seen that it has a negative trend and if a car has more weight it burns more fuel to move that weight so as the weigh increases the MPG decreases.
+
+```{r}
+# Scatterplot to show acceleration vs mpg
+ggplot(
+  data = Auto, 
+  aes(x = acceleration, y = mpg)) +
+  geom_point(color = "orange") + 
+  labs(title = "Acceleration vs MPG")
+```
+
+Ans- In this scatter plot, it can be seen that it has a positive trend and if a car has less acceleration time it burns more fuel quickly so as the acceleration time increases the MPG increases.
+
+```{r}
+# Scatterplot to show year vs mpg
+ggplot(
+  data = Auto, 
+  aes(x = year, y = mpg)) +
+  geom_point(color = "pink") + 
+  labs(title = "Year vs MPG")
+```
+
+Ans- In this scatter plot, it can be seen that it has a positive trend which means cars in the older years were less fuel efficient, as the new technology were introduced cars became more efficient and burn less fuel so as the year increases the MPG increases.
+
+```{r}
+# Scatterplot to show Origin vs mpg
+ggplot(
+  data = Auto, 
+  aes(x = origin, y = mpg)) +
+  geom_point(color = "purple") + 
+  labs(title = "Origin vs MPG")
+```
+
+Ans- In this scatter plot a positive trend can be seen where Origin of cars are (1. American, 2. European, 3. Japanese) and it can be seen that Japanese cars give better MPG followed by European cars and then American Cars.
+
+
+=============================================================================================================
+
+# Part II (12 pts + 1 possible extra credit) - Problems from Chapter 3, R for Data Science (2e)Links to an external site.
+
+```{r}
+library(nycflights13)
+```
+
+# Q2. - Exercises 3.2.5, Problem 1. (1pt)
+In a single pipeline for each condition, find all flights that meet the condition:
+
+a) Had an arrival delay of two or more hours
+
+```{r}
+flights_arrival_delay <- flights |> 
+  filter(arr_delay >= 120) |>
+arrange(desc(arr_delay))
+flights_arrival_delay
+```
+
+b) Flew to Houston (IAH or HOU)
+
+```{r}
+flights_huston <- flights |>
+  filter(dest %in% c("IAH", "HOU"))
+flights_huston
+```
+
+c) Were operated by United, American, or Delta
+
+```{r}
+flights_operators <- flights |>
+  filter(carrier %in% c("UA", "AA", "DL"))
+flights_operators
+```
+
+d) Departed in summer (July, August, and September)
+
+```{r}
+flights_summer <- flights |>
+  filter(month %in% c(7, 8, 9))
+flights_summer
+```
+
+e) Arrived more than two hours late but didn’t leave late
+
+```{r}
+flights_late2 <- flights |>
+  filter(arr_delay > 120 , dep_delay <= 0)
+flights_late2
+```
+
+f) Were delayed by at least an hour, but made up over 30 minutes in flight.
+
+```{r}
+flights_delayed60 <- flights |> 
+  filter(dep_delay >= 60, (dep_delay - arr_delay) > 30)
+flights_delayed60
+```
+
+=============================================================================================================
+
+# Q3.  Exercises 3.2.5, Problem 3. (1pt)
+Sort flights to find the fastest flights. (Hint: Try including a math calculation inside of your function.)
+
+```{r}
+fastest_flight <- flights |>
+  mutate(speed = (distance/air_time) * 60) |>
+arrange(desc(speed)) |>
+select(carrier, flight, speed)
+fastest_flight
+```
+
+=============================================================================================================
+
+# Q4.  Exercises 3.2.5, Problem 4. (1pt)
+Was there a flight on every day of 2013?
+
+```{r}
+flights_2013 <- flights |> 
+  distinct(year, month, day)
+flights_2013
+```
+
+=============================================================================================================
+
+# Q5. Exercises 3.3.5, Problem 1. (1pt)
+Compare dep_time, sched_dep_time, and dep_delay. How would you expect those three numbers to be related?
+
+```{r}
+flights_compared <- flights |> 
+  select(dep_time, sched_dep_time, dep_delay)
+flights_compared
+```
+
+Ans- The dep_time (actual departure time) is expected to be later than the sched_dep_time (scheduled departure time) when there is a positive dep_delay (departure delay), and they should be equal if there is no delay.
+
+=============================================================================================================
+
+# Q6. Exercises 3.3.5, Problem 3. (1pt)
+What happens if you specify the name of the same variable multiple times in a select()Links to an external site. call?
+
+```{r}
+flights_same_variable <- flights |> 
+  select(carrier, carrier, arr_time)
+flights_same_variable
+```
+Ans- I have picked "carrier" variable two times and we can see that the second variable is being dropped and only one variable is being selected.
+
+=============================================================================================================
+
+Q7. Exercises 3.3.5, Problem 4. (1pt)
+What does the any_of()Links to an external site. function do? Why might it be helpful in conjunction with this vector?
+
+           variables <- c("year", "month", "day", "dep_delay", "arr_delay")
+           
+```{r}
+variables <- c("year", "month", "day", "dep_delay", "arr_delay")
+flights |> 
+  select(any_of(variables))
+```
+Ans- The function any_of(variables) will check if each of the column names in the variables vector exists in the flights data frame then select all the columns that are present in flights from the vector variables and ignore any columns in the variables vector that do not exist in flights.
+
+It is helpful because any_of() prevents errors from occurring if any of the specified column names do not exist in the data frame. It allows to select columns dynamically based on a list of variable names, without needing to manually check if each column exists in the data. It can be used in situations where the set of column names might change or where some columns may be missing.
+
+=============================================================================================================
+
+Q8. Exercises 3.3.5, Problem 7. (1pt)
+
+Rename air_time to air_time_min to indicate units of measurement and move it to the beginning of the data frame.
+
+```{r}
+flights |>
+  rename(air_time_min = air_time) |>
+  relocate(air_time_min)
+```
+
+b) Why doesn’t the following work, and what does the error mean?
+
+flights |> selectLinks to an external site.(tailnum) |> arrangeLinks to an external site.(arr_delay)
+#> Error in `arrange()`:
+#> ℹ In argument: `..1 = arr_delay`.
+#> Caused by error:
+#> ! object 'arr_delay' not found
+
+Ans- The error occurs because the tailnum column is being selected with select(tailnum) and then attempting to arrange by arr_delay using arrange(arr_delay).
+
+When select(tailnum) is used, only the tailnum column remains in the data frame, and all other columns are dropped. Since arr_delay is no longer in the data frame after select(), the arrange(arr_delay) call cannot find the arr_delay column, causing the error: object 'arr_delay' not found.
+
+
+=============================================================================================================
+
+Q9. Exercises 3.5.7, Problem 1. (1pt)
+Which carrier has the worst average delays?
+
+```{r}
+average_delays <- flights |>
+  group_by(carrier) |>
+  summarize(
+    avg_dep_delay = mean(dep_delay, na.rm = TRUE),
+    avg_arr_delay = mean(arr_delay, na.rm = TRUE)  
+  ) |>
+  arrange(desc(avg_dep_delay))
+average_delays
+```
+
+Display the carrier with the worst average departure delay
+
+average_delays
+
+Extra Credit(1pt):
+Can you disentangle the effects of bad airports vs. bad carriers? Why/why not?
+Hint: think about
+
+flights |> group_by(carrier, dest) |> summarize(n())
+
+```{r}
+flights |>
+  group_by(carrier, dest) |>
+  summarize(avg_delay = mean(dep_delay, na.rm = TRUE)) |>
+  arrange(desc(avg_delay))
+```
+
+Ans- Disentangling bad airports vs. bad carriers is challenging in this context because a carrier's delays can be influenced by factors at the airport (like weather, traffic, or airport operations) and vice versa. For example:
+Bad airports: An airport with frequent delays due to weather, congestion, or poor infrastructure could cause delays for flights operated by multiple carriers.
+Bad carriers: A carrier with inefficiencies in operations, maintenance, or scheduling could experience delays regardless of the airport.
+
+=============================================================================================================
+
+Q10. Exercises 3.5.7, Problem 2. (1pt)
+Find the flights that are most delayed upon departure from each destination.
+
+```{r}
+flights |>
+  filter(dep_delay > 0) |>
+  group_by(dest) |> 
+  slice_max(dep_delay, n = 1) |> 
+  relocate(dest) |>
+arrange(desc(dep_delay))
+```
+
+=============================================================================================================
+
+Q11. Exercises 3.5.7, Problem 6. (3pt)
+Suppose we have the following tiny data frame:
+
+df <- tibble
+Links to an external site.(
+  x = 1:5,
+  y = c
+Links to an external site.("a", "b", "a", "a", "b"),
+  z = c
+Links to an external site.("K", "K", "L", "L", "K")
+)
+
+```{r}
+df <- tibble(
+  x = 1:5,
+  y = c("a", "b", "a", "a", "b"),
+  z = c("K", "K", "L", "L", "K")
+)
+df
+```
+
+a) (1pt) Write down what you think the output will look like, then check if you were correct, and describe what group_by()Links to an external site. does.
+
+Ans- It will create a 5 row and 3 column data frame with x,y and z variables where x will contain numbers from 1 - 5, y will contain values mentioned above i.e. (a,b,a,a,b) and z will contain values(K,K,L,L,K). 
+
+When we add the group_by()Links to an external site it groups the data based on the values in the y column (i.e., "a" and "b") and column y should look like (y = a,b,a,b,a)
+
+df |>
+  group_by
+Links to an external site.(y)
+
+```{r}
+df |>
+  group_by(y)
+```
+
+=============================================================================================================
+
+b) (1pt) Write down what you think the output will look like, then check if you were correct, and describe what arrange()Links to an external site. does. Also, comment on how it’s different from the group_by()Links to an external site. in part (a).
+
+df |> arrangeLinks to an external site.(y)
+
+Ans- We should have the tibble similar to question "a" before group_by i.e. It will create a 5 row and 3 column data frame with x,y and z variables where x will contain numbers from 1 - 5, y will contain values mentioned above i.e. (a,b,a,a,b) and z will contain values(K,K,L,L,K).
+
+When we use arrange(y) to Link to an external site the output will reorder the rows based on the values in the y column in ascending order (default behavior). Since "a" comes before "b" alphabetically, we expect all the rows with y = "a" to come first, followed by the rows with y = "b". So, the resulting tibble will look like this: (y = a,a,a,b,b)
+
+group_by() groups the data by one or more variables, preparing it for subsequent operations that will be applied within each group. It does not change the order of the rows in the data frame.
+
+arrange() reorders the rows of the data frame based on one or more columns, but it does not group the data in preparation for subsequent operations like group_by() does.
+
+```{r}
+df |> 
+  arrange(y)
+```
+
+=============================================================================================================
+
+f) (1pt) Write down what you think the outputs will look like, then check if you were correct, and describe what each pipeline does. How are the outputs of the two pipelines different?
+
+df |>
+  group_by
+Links to an external site.(y, z) |>
+  summarize
+Links to an external site.(mean_x = mean
+Links to an external site.(x))
+
+Ans- This pipeline groups the data by the y and z columns, and then calculates the mean of the x values within each group. The output will show one row for each unique combination of y and z, with the corresponding mean of x. Since y has two unique values ("a" and "b") and z has two unique values ("K" and "L"), the resulting output will be a summarized table with unique combinations of y and z, and the mean of x for each combination.
+
+```{r}
+df |>
+  group_by(y, z) |>
+  summarize(mean_x = mean(x))
+```
+
+df |>
+  group_by
+Links to an external site.(y, z) |>
+  mutate
+Links to an external site.(mean_x = mean
+Links to an external site.(x))
+
+This pipeline also groups the data by y and z, but instead of summarizing the data, it calculates the mean of x within each group and adds a new column (mean_x) to the original data frame. Every row in a particular group will get the same value of mean_x (the mean of x for that group).
+
+```{r}
+df |>
+  group_by(y, z) |>
+  mutate(mean_x = mean(x))
+```
+
+Pipeline 1 (summarize()): The output is a summarized data frame where each row represents a unique combination of the grouping variables (y and z), and the mean_x value is calculated for each combination of y and z.
+
+Pipeline 2 (mutate()): The output is the original data frame, but with a new column mean_x that contains the mean of x within each group. The mean_x values are repeated across rows within the same group.

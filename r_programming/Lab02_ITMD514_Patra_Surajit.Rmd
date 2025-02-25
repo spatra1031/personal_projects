@@ -1,0 +1,182 @@
+---
+title: "Lab02_ITMD514_05_Patra_Surajit"
+author: "Surajit Patra"
+date: "2024-08-26"
+output: html_document
+---
+# Notes.
+
+Answer the questions in this Rmd file, after you have changed the author field and file name as for Lab 1. 
+
+Use r code chunks to enter appropriate code.
+
+Make sure any plots you generate include appropriate labels, titles, and color usage.
+
+Use proper grammar, and exposition without being too wordy in your answers.
+
+
+```{r}
+# We will require the tidyverse library and the palmerpenguins library. 
+# install.packages("tidyverse")
+# The following loads the library for our use
+library(tidyverse) 
+library(palmerpenguins)
+library(ggthemes) # for the colorblind palette
+#If you do not already have these libraries installed you will need to use the #install.packages command to do so, or follow RStudio prompts to accomplish the same.
+```
+
+# Problem 1. (7 pts)
+
+(a) Consider the "bill_depth_mm" variable in the penguins data frame (see lectures 3 and 4). Review the documentation for the penguins dataset to answer, what does this variable describe? (1pt)
+
+Answer - The variable "bill_depth_mm" describes a number denoting bill depth (millimeters).
+
+(b) Are bill_depth_mm vs. bill_length_mm related? Use ggplot, as in lectures 3 and 4, to produce a scatterplot with bill_depth_mm on the y-axis and bill_length_mm on the x-axis, to help you answer this question. Describe the overall relationship between these two variables. Include an appropriate geom_smooth object mapped at the appropriate level (global level or geom); see lecture. (2pt)
+
+Answer - The trend line in the scatterplot of bill_depth_mm vs. bill_length_mm slopes from top to bottom which is a negative slope, this indicates that there is a negative correlation between the two variables. It means that, as the bill length increases, the bill depth tends to decrease, on average. This suggests that penguins with longer bills tend to have shallower (less deep) bills, and penguins with shorter bills tend to have deeper (thicker) bills.
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = bill_length_mm, y = bill_depth_mm))+
+  geom_point() +
+  geom_smooth(method = "lm")+
+    labs(
+    title = "Bill length and Bill depth relation")
+```
+
+(c) Now take into account the species as well. Use ggplot, to produce a scatterplot with bill_depth_mm on the y-axis and bill_length_mm on the x-axis, and species as the color and shape, to help you answer this question. Describe the overall relationship between these two variables based on this plot and this dataset. Include an appropriate geom_smooth object mapped at the appropriate level (global level or geom); see lecture. (2pt)
+
+Answer - The relationship between bill length and bill depth differs by species. Some species, like Adelie and Chinstrap, show a negative relationship, while others, like Gentoo, may show a different trend. Adelie and Chinstrap likely have a negative correlation between bill length and bill depth, with longer bills associated with shallower depths. Gentoo may show a different pattern, possibly no clear trend or a slight positive correlation.
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = bill_length_mm, y = bill_depth_mm, color = species, shape = species))+
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Bill length and Bill depth as per species")
+
+ggplot(
+  data = penguins,
+  mapping = aes(x = bill_length_mm, y = bill_depth_mm))+
+  geom_point(mapping = aes(color = species, shape = species)) +
+  geom_smooth(method = "lm") +
+  labs(
+    title = "Bill length and Bill depth as per species")
+```
+
+(d) Contrast your answers from (c) and (b). Comment and offer a possible explanation. (2pt)
+
+Answer - From the findings of (C) and (B) it can be concluded that the initial scatterplot with no species provided an overall view of the relationship between bill_depth_mm and bill_length_mm, which was generally negative. However, When the species factor was included, it became clear that the negative relationship observed was primarily driven by specific species (Adelie and Chinstrap). The Gentoo species showed a different pattern, highlighting that the general trend was not uniform across all species.
+
+# Problem 2 (3pts)
+
+(a) Consider the variable islands in the penguins dataset. Is it a categorical or numerical variable? Use ggplot to visualize its distribution through a barchart, or a histogram, depending on your answer. (2pt)
+
+Answer - The variable "islands" is a categorical variable.
+```{r}
+ggplot(
+  data = penguins, 
+  mapping = aes(x = island)) +
+  geom_bar(fill = "steelblue", color = "black")+
+  labs(
+    title = "Distribution of Penguin Species by Island")
+```
+
+(b) Produce a second plot displaying the frequencies or counts horizontally (and the categories or bins on the y axis. (1pt)
+
+Answer -
+```{r}
+ggplot(
+  data = penguins, 
+  mapping = aes(x = island)) +
+  geom_bar(fill = "steelblue", color = "black") + 
+    labs(
+    title = "Distribution of Penguin Species by Island") +
+  coord_flip()
+```
+
+# Problem 3 (7pts)
+
+(a) Consider the diamonds dataset (from tidyverse). How many data points and how many variables are in this dataset? Print the dataset to figure it out. (1pt)
+
+Answer -
+```{r}
+diamonds
+```
+There are 53,940 data points and 10 variables
+
+(b) Run (in an r-code chunk) the summary on the variables carat and cut of the diamonds set. Comment on what the function does each time. Are the variables categorical(qualitative) or numerical(quantitative)? (1pt)
+
+Answer - Since carat is a numerical (quantitative) variable, summary(diamonds$carat) provides a statistical summary of its distribution.
+
+```{r}
+# Summary of the carat variable (numerical)
+summary(diamonds$carat)
+```
+
+Since cut is a categorical (qualitative) variable, summary(diamonds$cut) provides counts of each level or category of cut.
+
+```{r}
+# Summary of the cut variable (categorical)
+summary(diamonds$cut)
+```
+
+(c) Use ggplot to visualize the distribution of the carat variable in the diamonds dataset through a histogram. Experiment with different binwidths (use at least 4).  (2pts)
+
+Answer - 
+
+```{r}
+ggplot(
+  data = diamonds, 
+  mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.1, fill = "steelblue", color = "black") +
+  labs(
+    title = "Diamond Carat Values (Binwidth = 0.1)"
+  )
+
+ggplot(
+  data = diamonds, 
+  mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.2, fill = "darkorange", color = "black") +
+  labs(
+    title = "Diamond Carat Values (Binwidth = 0.2)"
+  )
+
+ggplot(
+  data = diamonds, 
+  mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.03, fill = "lightgreen", color = "black") +
+  labs(
+    title = "Diamond Carat Values (Binwidth = 0.03)"
+  )
+
+ggplot(
+  data = diamonds, 
+  mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.05, fill = "purple", color = "black") +
+  labs(
+    title = "Diamond Carat Values (Binwidth = 0.05)"
+  )
+```
+
+(d) What binwidth reveals the most interesting patterns? Discuss briefly. (1pt)
+
+Answer - Binwidth = 0.05 reveals the most interesting patterns. It provides a good balance between granularity and smoothness, allowing to observe key features of the data, such as peaks, gaps, and overall distribution shape.
+
+(e) Generate a boxplot for carats using ggplot. Use the documentation and explain what each part of the boxplot represents. (2pts)
+
+Answer - The box represents the middle 50% of the data, with the length of the box indicating the interquartile range (IQR), which spans from the 25th percentile to the 75th percentile of the dataset. A line in the center of the box marks the median, or the 50th percentile, which shows the central tendency. The position of these lines helps illustrate the overall spread of the data and whether it's symmetrically distributed or skewed.
+
+Individual points outside the box represent outliers—these are observations that fall beyond 1.5 times the IQR from either side of the box, meaning they are unusually high or low values.
+
+The whiskers extending from the box show the range of the data, stretching to the most extreme points that are still within the non-outlier range. These whiskers stop at the farthest data points that are not considered outliers.
+```{r}
+ggplot(
+  data = diamonds, 
+  mapping = aes(y = carat)) +
+  geom_boxplot(fill = "lightblue", color = "black")+
+  labs(
+    title = "Carat Values in Diamonds")
+```  
