@@ -26,7 +26,7 @@ spots = get_parking_spots_bboxes(connected_components)
 spots = sorted(spots, key=lambda x: x[0])
 
 # Categorize into columns and rows
-column_threshold = 50  # Adjust threshold based on your specific case
+column_threshold = 50
 columns = []
 current_column = []
 last_x = spots[0][0]
@@ -39,7 +39,7 @@ for spot in spots:
     current_column.append(spot)
     last_x = x
 
-columns.append(current_column)  # Add the last column
+columns.append(current_column)
 
 # Sort each column by y-coordinates (rows)
 for column in columns:
@@ -64,29 +64,16 @@ frame_nmr = 0
 ret = True
 step = 30
 
-# Define positions for count labels for each column
-column_count_positions = {
-    'A': (80, 125),
-    'B': (190, 125),
-    'C': (305, 125),
-    'D': (410, 125),
-    'E': (530, 90),
-    'F': (650, 90),
-    'G': (765, 155),
-    'H': (885, 155),
-    'I': (990, 95),
-    'J': (1110, 95),
-    'K': (1220, 135),
-    'L': (1330, 135),
-    'M': (1450, 135),
-    'N': (1550, 135),
-    'O': (1670, 135),
-    'P': (1800, 135) 
-}
-
-# Serial communication setup
+# Serial communication setup (Kept but not executed)
 #ser = serial.Serial('COM3', 115200)  # Adjust 'COM3' to your serial port
 #time.sleep(2)  # Wait for the serial connection to initialize
+
+csv_file = r"D:\my_work\personal_projects\ai_projects\parking_lot_monitoring\arcgis_layers\parking_status.csv"
+
+# Ensure CSV file exists
+if not os.path.exists(csv_file):
+    pd.DataFrame(columns=["Id", "Status"]).to_csv(csv_file, index=False)
+    print(f"Empty CSV file created: {csv_file}")
 
 try:
     while ret:
@@ -128,41 +115,31 @@ try:
             if spots_status[spot_indx]:
                 column_counts[col] += 1
 
-        # Send the counts to ESP32
-        #counts_str = ','.join([f"{col}:{count}" for col, count in column_counts.items()])
-        #ser.write(counts_str.encode('utf-8'))
-        #ser.write(b'\n')  # End of message
-
+        # Update CSV in real-time
+        updated_data = []
         for spot_indx, spot_info in enumerate(labelled_spots):
             col, row, spot = spot_info
-            spot_status = spots_status[spot_indx]
-            x1, y1, w, h = spot
+            spot_status = "Empty" if spots_status[spot_indx] else "Occupied"
+            spot_id = f"{col}{row}"
+            updated_data.append({"Id": spot_id, "Status": spot_status})
 
-            color = (0, 255, 0) if spot_status else (0, 0, 255)
-            frame = cv2.rectangle(frame, (x1, y1), (x1 + w, y1 + h), color, 2)
-            
+        if updated_data:
+            df = pd.DataFrame(updated_data)
+            df.to_csv(csv_file, index=False)
+
+        # Draw bounding boxes and labels
+        for spot_indx, spot_info in enumerate(labelled_spots):
+            col, row, spot = spot_info
+            x1, y1, w, h = spot
+            color = (0, 255, 0) if spots_status[spot_indx] else (0, 0, 255)
+            cv2.rectangle(frame, (x1, y1), (x1 + w, y1 + h), color, 2)
             label = f"{col}{row}"
             if col in 'ACEGIKMO':
                 cv2.putText(frame, label, (x1 - 30, y1 + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
             else:
                 cv2.putText(frame, label, (x1 + w + 5, y1 + h // 2), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-        # Draw column counts above each column
-        for col_idx, column in enumerate(columns):
-            col_label = get_column_label(col_idx)
-            count_label = f"{column_counts[col_label]}"
-            if column:
-                x1, y1, w, h = column[0]
-                # Get position for count label
-                count_pos = (80 + col_idx * 100, 125)  # Adjust for column positions
-                # Draw green box for count label
-                count_text_size = cv2.getTextSize(count_label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)[0]
-                box_x1, box_y1 = count_pos[0], count_pos[1] - count_text_size[1] - 2
-                box_x2, box_y2 = count_pos[0] + count_text_size[0] + 5, count_pos[1] + 5
-                cv2.rectangle(frame, (box_x1, box_y1), (box_x2, box_y2), (0, 255, 0), -1)
-                cv2.putText(frame, count_label, count_pos, cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
-
-        # Draw the available spots text with adjustable position and size
+        
+         # Draw the available spots text with adjustable position and size
         def draw_text_box(frame, text, pos, font, scale, color, thickness):
             (text_width, text_height), baseline = cv2.getTextSize(text, font, scale, thickness)
             x, y = pos
@@ -175,92 +152,38 @@ try:
         text_x, text_y = 40, 60  # Specify the position here
         draw_text_box(frame, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
 
+      # Define custom Y-offsets for each column
+        column_y_offsets = {
+        'A': -280, 'B': -25, 'C': -30, 'D': -15,  # Adjust as needed
+        'E': -10, 'F': -12, 'G': -18, 'H': -24,
+        'I': -20, 'J': -22, 'K': -18, 'L': -24,
+        'M': -10, 'N': -12, 'O': -15, 'P': -20
+        }
+        # Draw column counts above each column
+        for col_idx, column in enumerate(columns):
+            col_label = get_column_label(col_idx)
+            count_label = f"{column_counts[col_label]}"
+            if column:
+                x1, y1, w, h = column[0]
+                count_pos = (x1 + w // 2, y1 - 10 - (col_idx * 5))
+                # Apply per-column Y offset (default to -10 if column isn't in dictionary)
+                
+                y_offset = column_y_offsets.get(col_label, -10)
+                count_pos = (x1 + w // 2, y1 + y_offset)
+
+                # Draw green box for count label
+                count_text_size = cv2.getTextSize(count_label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)[0]
+                box_x1, box_y1 = count_pos[0], count_pos[1] - count_text_size[1] - 2
+                box_x2, box_y2 = count_pos[0] + count_text_size[0] + 5, count_pos[1] + 5
+                cv2.rectangle(frame, (box_x1, box_y1), (box_x2, box_y2), (0, 255, 0), -1)
+                cv2.putText(frame, count_label, count_pos, cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
+
         cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
         cv2.imshow('frame', frame)
-        #output_video.write(frame)
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
 
         frame_nmr += 1
-
-    print("Starting shapefile creation...")
-
-    # Define the output shapefile path
-    output_shp = r"D:\my_work\personal_projects\ai_projects\parking_lot_monitoring\arcgis_layers\parking_bboxes.shp"
-    csv_file = r"D:\my_work\personal_projects\ai_projects\parking_lot_monitoring\arcgis_layers\parking_status.csv"
-
-
-    # Check if the shapefile exists
-    if not arcpy.Exists(output_shp):
-        print("Shapefile does not exist. Creating new one...")
-
-    # Define spatial reference (change EPSG if needed)
-        spatial_ref = arcpy.SpatialReference(3857)  # WGS 84
-
-    # Create shapefile
-        arcpy.CreateFeatureclass_management(out_path=os.path.dirname(output_shp),
-                                            out_name=os.path.basename(output_shp),
-                                            geometry_type="POLYGON",
-                                            spatial_reference=spatial_ref)
-
-        print("Shapefile created. Adding fields...")
-
-    # Add necessary fields
-        arcpy.AddField_management(output_shp, "Id", "TEXT")  # Example: A1, B1
-        arcpy.AddField_management(output_shp, "Column", "TEXT")
-        arcpy.AddField_management(output_shp, "Row", "SHORT")
-        arcpy.AddField_management(output_shp, "Status", "TEXT")  # Status: Empty/Occupied
-
-        print("Fields added.")
-    else:
-        print("Shapefile exists. Skipping creation...")
-
-# Ensure CSV file exists
-    if not os.path.exists(csv_file):
-        pd.DataFrame(columns=["Id", "Status"]).to_csv(csv_file, index=False)
-        print(f"Empty CSV file created: {csv_file}")
-
-# Function to update real-time status in the shapefile
-    def update_parking_status(spot_labels, spots_status):
-        print("Updating parking status...")
-
-        updated_data = []  # Store data for CSV
-
-    with arcpy.da.UpdateCursor(output_shp, ["Id", "Status"]) as cursor:
-        for row in cursor:
-            spot_id = row[0]  # Read current parking ID (A1, B1, etc.)
-
-            if spot_id in spot_labels:
-                index = spot_labels.index(spot_id)
-                status = "Empty" if spots_status[index] else "Occupied"
-                row[1] = status  # Update status
-                cursor.updateRow(row)
-
-                # Append data to CSV
-                updated_data.append({"Id": spot_id, "Status": status})
-
-        # Convert the list to a DataFrame and save as CSV
-         # If there's data, write to CSV
-    if updated_data:
-        df = pd.DataFrame(updated_data)
-        df.to_csv(csv_file, index=False)
-        print(f"CSV updated: {csv_file}")
-    else:
-        print("No updates found. CSV not modified.")
-        print(f"Parking status updated in shapefile and saved to {csv_file}")
-
-# Continuously monitor the parking lot and update shapefile status
-    try:
-        while True:
-        # AI model detects empty/occupied spots
-            detected_status = [True, False, True]  # Example: AI outputs (True = Empty, False = Occupied)
-            spot_labels = ["A1", "A2", "B1"]  # Corresponding spot labels (should match actual shapefile IDs)
-
-        # Update status in shapefile
-        update_parking_status(spot_labels, detected_status)
-
-    except KeyboardInterrupt:
-        print("\nProcess interrupted. Cleaning up...")
 
 finally:
     cap.release()  # Ensure camera resource is released
