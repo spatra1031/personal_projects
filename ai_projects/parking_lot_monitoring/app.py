@@ -6,20 +6,51 @@ import time
 import json
 import os
 import arcpy
+import psycopg2
 from util import get_parking_spots_bboxes, empty_or_not
 
 def calc_diff(im1, im2):
     return np.abs(np.mean(im1) - np.mean(im2))
 
+# PostgreSQL Database Connection Parameters
+DB_PARAMS = {
+    "dbname": "parking_db",
+    "user": "postgres",
+    "password": "pass@6454439",
+    "host": "localhost",  # Change if remote
+    "port": "5432"
+}
+
+# Function to update PostgreSQL with the parking spot statuses
+def update_parking_status(parking_data):
+    try:
+        conn = psycopg2.connect(**DB_PARAMS)
+        cur = conn.cursor()
+
+        for spot_id, status in parking_data:
+            sql = """
+            INSERT INTO parking_status (id, status)
+            VALUES (%s, %s)
+            ON CONFLICT (id) DO UPDATE SET status = EXCLUDED.status;
+            """
+            cur.execute(sql, (spot_id, status))
+        
+        conn.commit()
+        cur.close()
+        conn.close()
+        print("✅ Database updated successfully!")
+
+    except Exception as e:
+        print("❌ Error updating database:", e)
+
+# Load mask and video
 mask = 'mask_1920_1080.png'
 video_path = 'parking_1920_1080_loop.mp4'
-
 mask = cv2.imread(mask, 0)
-
 cap = cv2.VideoCapture(video_path)
 
+# Extract parking spots
 connected_components = cv2.connectedComponentsWithStats(mask, 4, cv2.CV_32S)
-
 spots = get_parking_spots_bboxes(connected_components)
 
 # Sort spots by x-coordinates (columns)
@@ -47,7 +78,13 @@ for column in columns:
 
 # Generate column labels from A, B, C, ...
 def get_column_label(col_idx):
-    return chr(ord('A') + col_idx)
+    """Generate column labels like A, B, ..., Z, AA, AB, ..."""
+    label = ""
+    while col_idx >= 0:
+        label = chr(ord('A') + (col_idx % 26)) + label
+        col_idx = (col_idx // 26) - 1
+    return label
+
 
 # Label the spots by column and row
 labelled_spots = []
@@ -127,6 +164,22 @@ try:
             df = pd.DataFrame(updated_data)
             df.to_csv(csv_file, index=False)
 
+        # Prepare data for PostgreSQL
+        updated_data = []
+        for spot_indx, spot_info in enumerate(labelled_spots):
+            col, row, spot = spot_info
+            spot_status = "Empty" if spots_status[spot_indx] else "Occupied"
+            spot_id = f"{col}{row}"  # Ensure correct ID format
+            updated_data.append((spot_id, spot_status))
+
+        # Debugging print
+        print("📌 Data being sent to DB:", updated_data[:5])  # Print first 5 records
+
+        # Update PostgreSQL
+        if updated_data:
+            update_parking_status(updated_data)
+
+
         # Draw bounding boxes and labels
         for spot_indx, spot_info in enumerate(labelled_spots):
             col, row, spot = spot_info
@@ -177,6 +230,24 @@ try:
                 box_x2, box_y2 = count_pos[0] + count_text_size[0] + 5, count_pos[1] + 5
                 cv2.rectangle(frame, (box_x1, box_y1), (box_x2, box_y2), (0, 255, 0), -1)
                 cv2.putText(frame, count_label, count_pos, cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
+                
+                """# Insert bounding boxes into the shapefile
+                with arcpy.da.InsertCursor(output_shp, ["SHAPE@", "Column", "Row"]) as cursor:
+                    for col, row, spot in labelled_spots:
+                        x1, y1, w, h = spot
+                        x2, y2 = x1 + w, y1 + h
+
+                # Create polygon geometry with Y-axis flipped
+                    y1, y2 = -y1, -y2  # Flip Y-coordinates
+
+                    polygon = arcpy.Polygon(arcpy.Array([arcpy.Point(x1, y1),
+                                             arcpy.Point(x2, y1),
+                                             arcpy.Point(x2, y2),
+                                             arcpy.Point(x1, y2),
+                                             arcpy.Point(x1, y1)]),
+                                            spatial_ref)
+
+                    cursor.insertRow([polygon, col, row])"""
 
         cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
         cv2.imshow('frame', frame)

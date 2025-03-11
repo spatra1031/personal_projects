@@ -112,7 +112,7 @@ E8,Occupied
 E9,Occupied
 E10,Occupied
 E11,Occupied
-E12,Empty
+E12,Occupied
 E13,Occupied
 E14,Occupied
 E15,Empty
@@ -288,7 +288,7 @@ L7,Occupied
 L8,Occupied
 L9,Occupied
 L10,Occupied
-L11,Occupied
+L11,Empty
 L12,Occupied
 L13,Occupied
 L14,Occupied
@@ -353,8 +353,8 @@ O2,Occupied
 O3,Occupied
 O4,Occupied
 O5,Occupied
-O6,Occupied
-O7,Empty
+O6,Empty
+O7,Occupied
 O8,Occupied
 O9,Empty
 O10,Occupied
@@ -394,4 +394,4 @@ P19,Empty
 P20,Occupied
 P21,Empty
 P22,Empty
-P23,Empty
+P23,Occupied

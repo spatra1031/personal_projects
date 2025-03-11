@@ -1,49 +1,84 @@
-# Welcome to My Personal Projects Repository! 📚🚀
+# 🚀 Welcome to My Personal Projects Repository! 📚💡
 
-Hi there! I'm Surajit Patra, and this is a collection of my personal projects that showcase my skills and interests in various domains, from data analytics to AI-powered applications. Explore the projects below to see what I've been working on!
+Hi there! I'm Surajit Patra, and this repository is a collection of my AI-powered applications, data analytics projects, and software development work. From machine learning to big data processing and API development, these projects highlight my passion for solving real-world problems with technology.
 
-# Projects Overview
+## 🔥 Projects Overview
 
-# BookSearchApp
-Directory: BookSearchApp/BookSearchApp-main
+### 🏥 MRI Brain Tumor Detection
+📍 Directory: ai_projects/mri_image_detection
+A deep learning model that classifies MRI brain scans into tumor types with high accuracy.
+✅ CNN-Based Tumor Classification (Glioma, Meningioma, Pituitary, No Tumor)
+✅ Streamlit Web App for real-time predictions
+✅ Supports Multiple Image Formats (JPG, PNG, JPEG)
 
-Description: A dynamic application that allows users to search for books using various filters and criteria. This project highlights my skills in creating user-friendly interfaces and integrating APIs to fetch and display book data.
+🔗 Explore the Code
 
-# API Projects
-Directory: api_projects
+### 🚗 AI-Powered Parking Lot Monitoring
+📍 Directory: ai_projects/parking_lot_monitoring
+An AI-driven system that detects available parking spots in real-time using computer vision and integrates with ArcGIS.
+✅ Live Parking Detection from video feeds
+✅ GIS Integration for real-time mapping
+✅ PostgreSQL Database for data storage
 
-Fast API - Instagram Clone: fast_api/instagram
+🔗 Explore the Code
 
-Description: A simplified version of Instagram built using FastAPI. This project demonstrates my ability to create RESTful APIs and handle user authentication, image uploads, and social interactions.
+### 📊 AI-Powered Data Analysis Dashboard
+📍 Directory: ai_projects/ai_dashboard
+A natural language-driven analytics tool that converts user queries into SQL commands and dynamic visualizations.
+✅ AI-Generated SQL Queries for instant insights
+✅ Interactive Data Visualizations (bar, line, scatter, pie)
+✅ Streamlit-based Dashboard
 
-REST API - Messaging and Profile Service: rest_api/message service/profile service
+🔗 Explore the Code
 
-Description: A comprehensive messaging service API that includes user profiles. This project showcases my expertise in designing and implementing RESTful services, managing data persistence, and ensuring secure communication between users.
+### 📚 Book Search App
+📍 Directory: BookSearchApp/BookSearchApp-main
+A dynamic book discovery app that allows users to search for books using various filters.
+✅ User-friendly UI for book searches
+✅ API Integration to fetch book details
 
-# Java Projects
-Directory: java_projects/UtilityManagement
+🔗 Explore the Code
 
-Description: A utility management system developed in Java. This project focuses on efficiently managing resources and utilities, highlighting my skills in object-oriented programming and software development in Java.
+## 🌐 API Development Projects
+📍 Directory: api_projects
 
-# Spark Projects
-Directory: spark_projects
+### 📸 FastAPI - Instagram Clone
+A simplified Instagram clone with features like user authentication and image uploads.
+✅ FastAPI-powered backend
+✅ Handles user authentication & social interactions
 
-Divvy Trips: divvy_trips
+🔗 Explore the Code
 
-Description: Analysis of Divvy bike-sharing data to uncover usage patterns and trends. This project demonstrates my ability to handle large datasets and perform complex data analysis using Apache Spark.
+### 💬 Messaging & Profile Service (REST API)
+A messaging API with user profiles and secure communication.
+✅ RESTful API for messaging
+✅ Data persistence & security features
 
-Employees: employees
+🔗 Explore the Code
 
-Description: Data processing and analysis of employee records. This project highlights my skills in data wrangling, cleaning, and transforming data for insightful analysis.
+## ☕ Java-Based Utility Management System
+📍 Directory: java_projects/UtilityManagement
+A utility management system built using Java for efficient resource tracking.
+✅ Object-oriented design
+✅ Resource & utility management
 
-Flights Delay: flights_delay
+🔗 Explore the Code
 
-Description: An exploration of flight delay data to identify causes and patterns of delays. This project showcases my proficiency in using Spark for big data analysis and deriving actionable insights.
+## 🔥 Big Data Analytics with Apache Spark
+📍 Directory: spark_projects
 
-MnM Count: mnm_count
+Divvy Bike Trips Analysis – Uncovering usage patterns in bike-sharing data
+Employee Data Processing – Cleaning & transforming workforce data
+Flight Delay Analysis – Identifying trends & causes of flight delays
+M&M Candy Count – Fun data aggregation project
+San Francisco Fire Calls – Analyzing emergency response patterns
+🔗 Explore the Code
 
-Description: A fun analysis of M&M candy counts to demonstrate data aggregation and transformation techniques. This project is a playful yet educational example of using Spark for data processing.
+## 📌 Tech Stack & Tools
+🔹 AI & Machine Learning – TensorFlow, OpenCV, FastAPI
+🔹 Big Data Processing – Apache Spark, SQL
+🔹 Web & API Development – Streamlit, FastAPI, PostgreSQL
+🔹 GIS & Mapping – ArcGIS, Geospatial Analysis
+🔹 Programming – Python, Java, SQL
 
-San Francisco Fire Calls: sanfrancisco_firecalls
-
-Description: Analysis of San Francisco fire call data to understand incident patterns and response times. This project illustrates my ability to analyze emergency services data and extract meaningful insights.
+🚀 Feel free to explore, contribute, and customize these projects!
