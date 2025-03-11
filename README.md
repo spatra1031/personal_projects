@@ -20,7 +20,7 @@ An AI-driven system that detects available parking spots in real-time using comp
 ✅ GIS Integration for real-time mapping
 ✅ PostgreSQL Database for data storage
 
-🔗 Explore the Code
+🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/ai_projects/parking_lot_monitoring)
 
 ### 📊 AI-Powered Data Analysis Dashboard
 📍 Directory: ai_projects/ai_dashboard
