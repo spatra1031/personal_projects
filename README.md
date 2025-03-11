@@ -11,7 +11,7 @@ A deep learning model that classifies MRI brain scans into tumor types with high
 ✅ Streamlit Web App for real-time predictions
 ✅ Supports Multiple Image Formats (JPG, PNG, JPEG)
 
-🔗 Explore the Code
+🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/ai_projects/mri_image_detection)
 
 ### 🚗 AI-Powered Parking Lot Monitoring
 📍 Directory: ai_projects/parking_lot_monitoring
