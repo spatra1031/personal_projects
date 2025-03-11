@@ -29,7 +29,7 @@ A natural language-driven analytics tool that converts user queries into SQL com
 ✅ Interactive Data Visualizations (bar, line, scatter, pie)
 ✅ Streamlit-based Dashboard
 
-🔗 Explore the Code
+🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/ai_projects/dashboard)
 
 ### 📚 Book Search App
 📍 Directory: BookSearchApp/BookSearchApp-main
@@ -37,7 +37,7 @@ A dynamic book discovery app that allows users to search for books using various
 ✅ User-friendly UI for book searches
 ✅ API Integration to fetch book details
 
-🔗 Explore the Code
+🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/BookSearchApp/BookSearchApp-main)
 
 ## 🌐 API Development Projects
 📍 Directory: api_projects
@@ -47,14 +47,14 @@ A simplified Instagram clone with features like user authentication and image up
 ✅ FastAPI-powered backend
 ✅ Handles user authentication & social interactions
 
-🔗 Explore the Code
+🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/api_projects/fast_api/instagram)
 
 ### 💬 Messaging & Profile Service (REST API)
 A messaging API with user profiles and secure communication.
 ✅ RESTful API for messaging
 ✅ Data persistence & security features
 
-🔗 Explore the Code
+🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/api_projects/rest_api/message_profile_service/surajit)
 
 ### ☕ Java-Based Utility Management System
 📍 Directory: java_projects/UtilityManagement
@@ -62,7 +62,7 @@ A utility management system built using Java for efficient resource tracking.
 ✅ Object-oriented design
 ✅ Resource & utility management
 
-🔗 Explore the Code
+🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/java_projects/UtilityManagement)
 
 ## 🔥 Big Data Analytics with Apache Spark
 📍 Directory: spark_projects
@@ -72,7 +72,8 @@ Employee Data Processing – Cleaning & transforming workforce data
 Flight Delay Analysis – Identifying trends & causes of flight delays
 M&M Candy Count – Fun data aggregation project
 San Francisco Fire Calls – Analyzing emergency response patterns
-🔗 Explore the Code
+
+🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/spark_projects)
 
 ## 📌 Tech Stack & Tools
 🔹 AI & Machine Learning – TensorFlow, OpenCV, FastAPI
