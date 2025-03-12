@@ -1,39 +1,38 @@
-# Objective:
+# 🍬 M&M Color Count Analysis using Apache Spark
 
-The objective of the project "mnm_count" is to:
+## 🎯 Overview
+This project analyzes M&M candy color distribution across different U.S. states using Apache Spark. It provides insights into the most popular M&M colors and their distribution patterns.
 
-Deploy and discuss the structure of a Spark Application.
-Compare and contrast the difference between a PySpark and Scala Spark Application.
-Explain the concept of File Paths and how they are used to load data into a Spark Cluster.
-Compile a significant Spark application and understand its structure.
-Learn how to deal with file paths and load data into a Spark Cluster for Data Analysis.
-Code Explanation and Output:
-Both the Python and Scala code snippets provided are aimed at achieving the same objective. They are designed to read M&M candy data from a CSV file, perform data analysis using Apache Spark, and display the results.
+## 🛠️ Tech Stack
+Apache Spark (PySpark) – Distributed data processing
+DataFrame API – Data aggregation and filtering
+CSV Data Handling – Reading and transforming structured data
 
-# Python Code Explanation:
+## 📂 Dataset
+The dataset consists of:
+✅ State – U.S. state where M&Ms were counted
+✅ Color – M&M color (e.g., Red, Blue, Yellow)
+✅ Count – Number of M&Ms for each color in a state
 
-The Python code utilizes PySpark to perform the data analysis.
-It takes a CSV file path as an argument.
-Reads the CSV file into a DataFrame.
-Performs data aggregation operations such as grouping by state and color, summing the counts, and ordering by count in descending order.
-Displays the aggregated data for all states and specifically for the state of California (CA).
-Finally, it stops the Spark session.
+📌 Project Breakdown
+## 📊 Step 1: Data Loading
+📌 Process:
+1️⃣ Read CSV file into a Spark DataFrame
+2️⃣ Infer schema to determine column types
 
-# Scala Code Explanation:
+## 📊 Step 2: Total M&M Count by State & Color
+📌 Process:
+1️⃣ Group data by State and Color
+2️⃣ Sum up the count for each group
+3️⃣ Sort results in descending order to find the most popular color
 
-The Scala code uses Apache Spark's Scala API.
-It follows a similar structure to the Python code.
-Reads the CSV file into a DataFrame.
-Performs the same data aggregation operations.
-Displays the aggregated data for all states and specifically for the state of California (CA).
-Stops the Spark session.
+## 📊 Step 3: M&M Color Count in California (CA)
+📌 Process:
+1️⃣ Filter data to include only California (CA)
+2️⃣ Group by Color and sum the counts
+3️⃣ Sort results to identify the most popular color in CA
 
-# Expected Output:
-
-The expected output of running either the Python or Scala code would be:
-
-A table showing the aggregated M&M counts grouped by state and color.
-The output is sorted by the sum of counts in descending order.
-Additionally, for the state of California (CA), a subset of the data is displayed, showing the aggregated counts for different M&M colors.
-The total number of rows in the aggregated DataFrame is also printed.
-This project serves as a hands-on exercise to understand the structure of a Spark application, compare PySpark and Scala Spark implementations, and learn how to work with data files within a Spark cluster for analysis purposes.
+## 📊 Key Insights & Takeaways
+✅ Identifies the most popular M&M color in the U.S.
+✅ Analyzes state-wise color preferences
+✅ Finds the top M&M color in California
