@@ -56,7 +56,7 @@ A messaging API with user profiles and secure communication.
 
 🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/api_projects/rest_api/message_profile_service/surajit)
 
-### ☕ Java-Based Utility Management System
+## ☕ Java-Based Utility Management System
 📍 Directory: java_projects/UtilityManagement
 A utility management system built using Java for efficient resource tracking.
 ✅ Object-oriented design
