@@ -67,11 +67,18 @@ A utility management system built using Java for efficient resource tracking.
 ## 🔥 Big Data Analytics with Apache Spark
 📍 Directory: spark_projects
 
-Divvy Bike Trips Analysis – Uncovering usage patterns in bike-sharing data
-Employee Data Processing – Cleaning & transforming workforce data
-Flight Delay Analysis – Identifying trends & causes of flight delays
-M&M Candy Count – Fun data aggregation project
-San Francisco Fire Calls – Analyzing emergency response patterns
+Unlock the power of distributed computing with these real-world Apache Spark projects! Each project dives deep into big data processing, analysis, and optimization, showcasing how Spark handles large-scale datasets efficiently.
+
+📊 Projects in This Repository:
+🚴 Divvy Bike Trips Analysis – Discover usage patterns in Chicago’s bike-sharing system. When are people riding the most? What are the busiest stations? Let’s find out!
+
+💼 Employee Data Processing – Cleaning, transforming, and analyzing workforce data to uncover salary trends, job roles, and departmental insights.
+
+✈️ Flight Delay Analysis – Identifying trends and root causes of flight delays across different airports and seasons. Can we predict delays?
+
+🍬 M&M Candy Count – A fun, colorful data aggregation project analyzing the distribution of M&M colors across states.
+
+🚒 San Francisco Fire Calls – Analyzing emergency response patterns to determine the busiest neighborhoods, response times, and most common fire incidents.
 
 🔗 [Explore the Code](https://github.com/spatra1031/personal_projects/tree/main/spark_projects)
 
