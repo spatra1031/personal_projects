@@ -17,7 +17,7 @@ Each project focuses on solving a real-world problem, covering domains like tran
 
 🛠️ Tech Stack: Spark SQL | DataFrames | PySpark | Parquet | JSON
 
-🔗 Code
+🔗 [Code](https://github.com/spatra1031/personal_projects/tree/main/spark_projects/flights_delay)
 
 ### 2️⃣ M&M Candy Count Analysis 🍬
 📌 Objective: Analyze the distribution of M&M candy colors across different states.
@@ -28,7 +28,7 @@ Each project focuses on solving a real-world problem, covering domains like tran
 
 🛠️ Tech Stack: PySpark | Data Aggregation | DataFrames
 
-🔗 Code
+🔗 [Code](https://github.com/spatra1031/personal_projects/tree/main/spark_projects/mnm_count)
 
 ### 3️⃣ San Francisco Fire Calls Analysis 🚒
 📌 Objective: Perform exploratory data analysis on fire department emergency calls in San Francisco.
@@ -40,7 +40,7 @@ Each project focuses on solving a real-world problem, covering domains like tran
 
 🛠️ Tech Stack: PySpark | Spark SQL | Data Aggregation | Parquet
 
-🔗 Code
+🔗 [Code](https://github.com/spatra1031/personal_projects/tree/main/spark_projects/sanfrancisco_firecalls)
 
 ### 4️⃣ Divvy Bike Trips Analysis 🚴
 📌 Objective: Analyze bike-sharing trends in Chicago using Divvy bike trip data.
@@ -51,7 +51,7 @@ Each project focuses on solving a real-world problem, covering domains like tran
 
 🛠️ Tech Stack: PySpark | Spark SQL | DataFrames | Data Aggregation
 
-🔗 Code
+🔗 [Code](https://github.com/spatra1031/personal_projects/tree/main/spark_projects/divvy_trips)
 
 ### 5️⃣ Employee Salary Analysis 💼
 📌 Objective: Perform salary data analysis to gain insights into workforce compensation.
@@ -62,13 +62,14 @@ Each project focuses on solving a real-world problem, covering domains like tran
 
 🛠️ Tech Stack: PySpark | Spark SQL | DataFrames | Statistical Analysis
 
-🔗 Code
+[🔗 Code](https://github.com/spatra1031/personal_projects/tree/main/spark_projects/flights_delay)
 
 ### 🛠️ Tech Stack & Tools Used
 🚀 Apache Spark – High-performance distributed computing
 🐍 PySpark – Python API for Spark
 📊 Spark SQL – Querying and analyzing structured data
-📂 DataFrames & Datasets – Efficient data manipulation
+
+### 📂 DataFrames & Datasets – Efficient data manipulation
 📝 Scala – Optimized Spark programming
 🗄️ Parquet & JSON – Scalable data storage
 
