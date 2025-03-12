@@ -4,6 +4,8 @@ Hi there! I'm Surajit Patra, and this repository is a collection of my AI-powere
 
 ## 🔥 Projects Overview
 
+## AI Projects
+
 ### 🏥 MRI Brain Tumor Detection
 📍 Directory: ai_projects/mri_image_detection
 A deep learning model that classifies MRI brain scans into tumor types with high accuracy.
