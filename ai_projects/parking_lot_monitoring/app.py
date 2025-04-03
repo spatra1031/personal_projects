@@ -7,6 +7,7 @@ import json
 import os
 import arcpy
 import psycopg2
+import threading
 from util import get_parking_spots_bboxes, empty_or_not
 
 def calc_diff(im1, im2):
@@ -14,27 +15,76 @@ def calc_diff(im1, im2):
 
 # PostgreSQL Database Connection Parameters
 DB_PARAMS = {
-    "dbname": "parking_db",
+    "dbname": "postgres",
     "user": "postgres",
     "password": "pass@6454439",
-    "host": "localhost",  # Change if remote
+    "host": "localhost",
     "port": "5432"
 }
 
-# Function to update PostgreSQL with the parking spot statuses
-def update_parking_status(parking_data):
+DB_NAME = "parking_db"
+
+def create_database():
+    """Creates a new database if it doesn't exist."""
     try:
         conn = psycopg2.connect(**DB_PARAMS)
+        conn.autocommit = True
+        cur = conn.cursor()
+        cur.execute(f"SELECT 1 FROM pg_database WHERE datname = '{DB_NAME}';")
+        exists = cur.fetchone()
+
+        if not exists:
+            cur.execute(f"CREATE DATABASE {DB_NAME};")
+            print(f"✅ Database '{DB_NAME}' created successfully!")
+        else:
+            print(f"ℹ️ Database '{DB_NAME}' already exists.")
+
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"❌ Error creating database: {e}")
+
+def create_table():
+    """Creates a table in the database."""
+    try:
+        conn = psycopg2.connect(dbname=DB_NAME, user="postgres", password="pass@6454439", host="localhost", port="5432")
         cur = conn.cursor()
 
-        for spot_id, status in parking_data:
-            sql = """
-            INSERT INTO parking_status (id, status)
-            VALUES (%s, %s)
-            ON CONFLICT (id) DO UPDATE SET status = EXCLUDED.status;
-            """
-            cur.execute(sql, (spot_id, status))
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS parking_spots (
+                Id VARCHAR(10) PRIMARY KEY,
+                Status VARCHAR(10)
+            );
+        """)
+        conn.commit()
+        print("✅ Table 'parking_spots' created successfully!")
+
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"❌ Error creating table: {e}")
+
+# Function to update PostgreSQL with the parking spot statuses
+def update_parking_status(db_data):
+    """Updates the parking status in the database efficiently using batch insert."""
+    if not db_data:
+        print("⚠️ No data to update.")
+        return
+
+    try:
+        conn = psycopg2.connect(dbname=DB_NAME, user="postgres", password="pass@6454439", host="localhost", port="5432")
+        cur = conn.cursor()
+
+        sql = """
+        INSERT INTO parking_spots (Id, Status)
+        VALUES %s
+        ON CONFLICT (Id) DO UPDATE SET Status = EXCLUDED.Status;
+        """
         
+        # Use psycopg2's execute_values to insert all records at once
+        from psycopg2.extras import execute_values
+        execute_values(cur, sql, db_data)
+
         conn.commit()
         cur.close()
         conn.close()
@@ -42,6 +92,10 @@ def update_parking_status(parking_data):
 
     except Exception as e:
         print("❌ Error updating database:", e)
+
+def update_parking_status_async(db_data):
+    """Runs the update in a separate thread."""
+    threading.Thread(target=update_parking_status, args=(db_data,)).start()
 
 # Load mask and video
 mask = 'mask_1920_1080.png'
@@ -96,10 +150,11 @@ spots_status = [None for _ in spots]
 diffs = [None for _ in spots]
 
 previous_frame = None
+previous_spots_status = [None] * len(spots)
 
 frame_nmr = 0
 ret = True
-step = 30
+step = 60
 
 # Serial communication setup (Kept but not executed)
 #ser = serial.Serial('COM3', 115200)  # Adjust 'COM3' to your serial port
@@ -111,6 +166,8 @@ csv_file = r"D:\my_work\personal_projects\ai_projects\parking_lot_monitoring\arc
 if not os.path.exists(csv_file):
     pd.DataFrame(columns=["Id", "Status"]).to_csv(csv_file, index=False)
     print(f"Empty CSV file created: {csv_file}")
+
+previous_db_update = []
 
 try:
     while ret:
@@ -145,12 +202,17 @@ try:
         if frame_nmr % step == 0:
             previous_frame = frame.copy()
 
-        # Count empty spots in each column
-        column_counts = {get_column_label(i): 0 for i in range(len(columns))}
-        for spot_indx, spot_info in enumerate(labelled_spots):
-            col, row, spot = spot_info
-            if spots_status[spot_indx]:
-                column_counts[col] += 1
+            # Check if parking spots' status has changed
+            if spots_status != previous_spots_status:
+                column_counts = {get_column_label(i): 0 for i in range(len(columns))}
+        
+                for spot_indx, spot_info in enumerate(labelled_spots):
+                    col, row, spot = spot_info
+                    if spots_status[spot_indx]:  # If spot is empty
+                        column_counts[col] += 1
+        
+                # Store the last known spot statuses
+                previous_spots_status = spots_status.copy()
 
         # Update CSV in real-time
         updated_data = []
@@ -161,9 +223,11 @@ try:
             updated_data.append({"Id": spot_id, "Status": spot_status})
 
         if updated_data:
-            df = pd.DataFrame(updated_data)
+            df = pd.DataFrame(updated_data, columns=["Id", "Status"])
             df.to_csv(csv_file, index=False)
-
+        else:
+            print("⚠️ No data to write to CSV. Skipping DataFrame creation.")
+        
         # Prepare data for PostgreSQL
         updated_data = []
         for spot_indx, spot_info in enumerate(labelled_spots):
@@ -172,12 +236,28 @@ try:
             spot_id = f"{col}{row}"  # Ensure correct ID format
             updated_data.append((spot_id, spot_status))
 
+        # ✅ **FIX: Add this to avoid NameError**
+        if previous_spots_status is None:
+            previous_spots_status = spots_status.copy()
+
+        # ✅ **Only update DB if a significant number of spots changed**
+        if frame_nmr % step == 0:
+        # Calculate changed spots
+            changed_spots = [(spot_id, spot_status) for spot_id, spot_status in updated_data if (spot_id, spot_status) not in previous_db_update]
+
+        # Only update if a significant number of spots changed
+            if len(changed_spots) > 5:  # Adjust the threshold as needed
+                update_parking_status_async(changed_spots)
+                previous_db_update = changed_spots.copy()  # Store last updated spots
+            previous_spots_status = [s if s is not None else False for s in spots_status] # Store last state
+        
         # Debugging print
-        print("📌 Data being sent to DB:", updated_data[:5])  # Print first 5 records
+        #print("📌 Data being sent to DB:", updated_data[:5])  # Print first 5 records
 
         # Update PostgreSQL
-        if updated_data:
-            update_parking_status(updated_data)
+        if updated_data and updated_data != previous_db_update:
+            update_parking_status_async(updated_data)
+            previous_db_update = updated_data.copy()
 
 
         # Draw bounding boxes and labels
@@ -219,6 +299,7 @@ try:
             if column:
                 x1, y1, w, h = column[0]
                 count_pos = (x1 + w // 2, y1 - 10 - (col_idx * 5))
+                
                 # Apply per-column Y offset (default to -10 if column isn't in dictionary)
                 
                 y_offset = column_y_offsets.get(col_label, -10)
