@@ -121,7 +121,7 @@ E17,Empty
 E18,Occupied
 E19,Occupied
 E20,Empty
-E21,Occupied
+E21,Empty
 E22,Occupied
 E23,Empty
 E24,Occupied
@@ -285,7 +285,7 @@ L4,Occupied
 L5,Occupied
 L6,Occupied
 L7,Occupied
-L8,Occupied
+L8,Empty
 L9,Occupied
 L10,Occupied
 L11,Empty
@@ -394,4 +394,4 @@ P19,Empty
 P20,Occupied
 P21,Empty
 P22,Empty
-P23,Empty
+P23,Occupied
