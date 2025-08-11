@@ -1,5 +1,9 @@
 # ★ California Ozone Concentration & Socioeconomic Impact Analysis ★
 
+## ★ Project Files ★
+-  ![map](images/Geospatial_and_environmental_analysis.jpg)  
+  *(Contains the final thematic wildfire impact map for California counties)*
+
 ## ★ Problem ★
 Ground-level ozone, while beneficial in the upper atmosphere, poses significant health risks when present in the air we breathe.  
 Understanding **what causes ozone buildup** and whether it **disproportionately affects certain populations** is critical for public health planning in California.  
