@@ -1,8 +1,7 @@
 # ★ California Ozone Concentration & Socioeconomic Impact Analysis ★
 
 ## ★ Project Files ★
--  ![map](images/Geospatial_and_environmental_analysis.jpg)  
-  *(Contains the final thematic wildfire impact map for California counties)*
+-  ![map](images/Geospatial_and_environmental_analysis.jpg)
 
 ## ★ Problem ★
 Ground-level ozone, while beneficial in the upper atmosphere, poses significant health risks when present in the air we breathe.  
@@ -84,8 +83,3 @@ Using **ArcGIS Pro** and multi-source environmental and census datasets, I devel
   - Two scatter plots for key variable relationships.
 
 ---
-
-## ★ Project Files ★
-- 📄! [map] (Geospatial_and_environmental_analysis.pdf)  
-  *(Contains primary map, interpolated surface, and both scatter plots)*
-

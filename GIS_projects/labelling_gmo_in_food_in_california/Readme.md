@@ -1,8 +1,7 @@
 # ★ California Wildfire Impact Analysis (2012–2022) ★
 
 ## ★ Project Files ★
--  ![map](images/electoral_politics.jpg)  
-  *(Contains the final thematic wildfire impact map for California counties)*
+-  ![map](images/electoral_politics.jpg)
 
 ## ★ Problem ★
 Wildfires in California have grown in intensity and frequency over the last decade, leaving a significant impact on communities, ecosystems, and infrastructure.  
@@ -61,9 +60,3 @@ Using **ArcGIS Pro** and authoritative California wildfire perimeter data, I des
 - Produced a **county-level wildfire impact map** showing percentage of land affected (2012–2022).
 - Identified high-impact counties for **emergency management prioritization**.
 - Created reusable geoprocessing workflow for similar spatial analyses.
-
----
-
-
-
----
