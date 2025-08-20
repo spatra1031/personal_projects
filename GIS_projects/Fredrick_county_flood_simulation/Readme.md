@@ -1,67 +1,67 @@
-# ★ California Wildfire Impact Analysis (2012–2022) ★
+# ★ Frederick County Flood Simulation ★
 
-## ★ Problem ★
-Wildfires in California have grown in intensity and frequency over the last decade, leaving a significant impact on communities, ecosystems, and infrastructure.  
-While raw wildfire perimeter datasets exist, decision-makers often lack **clear, county-level summaries** of the **total land area affected** over time.  
-Overlapping fire boundaries and inconsistent reporting make it challenging to quantify the **true extent of land burned** in each county.
-
----
-
-## ★ Purpose ★
-The goal of this project was to:
-- Quantify **total burned acreage** in each California county between 2012 and 2022.
-- Calculate the **percentage of county area** affected by wildfires.
-- Visualize wildfire impact patterns to support **recovery planning** and **resource allocation**.
+## ★ Project Overview ★
+This project was developed in collaboration with **Frederick County officials**, who wanted to identify **flood-prone areas** within their jurisdiction and use the insights to make **informed urban planning and emergency management decisions**.  
+By combining **3D city modeling** and **flood simulation techniques**, the project delivers both **technical analysis** and **immersive visualization** to help stakeholders understand the scale and impact of potential flood events.
 
 ---
 
-## ★ Solution ★
-Using **ArcGIS Pro** and authoritative California wildfire perimeter data, I designed a geoprocessing workflow to:
-1. **Integrate** wildfire perimeters from multiple years into a single continuous burn area polygon.
-2. **Intersect** the unified burn area with California county boundaries.
-3. **Calculate** burned acreage and percentage of county affected.
-4. **Visualize** results through a thematic map using Natural Breaks classification (5 classes).
-5. **Document** metadata and export outputs for public sharing.
+## ★ Client Problem ★
+Frederick County faced challenges in:
+- Identifying **which neighborhoods and infrastructures** were most vulnerable to flooding.  
+- Communicating complex hydrological risks to **non-technical decision-makers and the public**.  
+- Evaluating **resilience strategies** for flood-prone areas in advance of extreme weather events.  
+
+Traditional GIS flood models provided data but lacked an intuitive, real-world visualization to support **strategic planning**.
 
 ---
 
-## ★ Workflow ★
-1. **Data Preparation**
-   - Imported California **county boundaries** and **wildfire perimeters** (2012–2022) from a File Geodatabase.
-   
-2. **Data Processing**
-   - Dissolved 4,102 wildfire polygons into a **single burn area** feature.
-   - Intersected with county boundaries to get fire-affected areas per county.
-   - Calculated **area in US Survey Acres** for each affected polygon.
-   - Summarized acreage by county and joined results back to the county dataset.
-   - Computed **% of county area burned**.
+## ★ Project Purpose ★
+The objectives of this project were to:
+- Build a **3D digital twin** of Frederick County for spatial analysis.  
+- Simulate **flood scenarios** across varying water levels.  
+- Provide an **interactive flood visualization tool** to support:  
+  - Emergency response planning  
+  - Zoning and development decisions  
+  - Public communication and awareness  
 
-3. **Mapping & Visualization**
-   - Applied a **Natural Breaks (Jenks)** classification to visualize wildfire impact percentages.
-   - Added **labels**, **legend**, **north arrow**, **scale bar**, and **basemap** for context.
+---
 
-4. **Export & Sharing**
-   - Exported the final **PDF map** and created an **ArcGIS Map Package** for reproducibility.
+## ★ Solution Approach ★
+The project was executed in two integrated phases:
 
+1. **3D City Modeling in ArcGIS CityEngine**
+   - Created a **realistic 3D city model** of Frederick County using building footprints, terrain, and elevation data.  
+   - Captured the county’s urban infrastructure and natural landscape to ensure accurate flood modeling.  
+   ![cityengine](images/cityengine.png)
+
+2. **Flood Simulation in Unity**
+   - Imported the 3D city and elevation model into **Unity Engine**.  
+   - Designed a **dynamic flood simulation** showing how rising water levels spread through the county.  
+   - Produced a **visually engaging simulation environment** for planners and decision-makers.  
+![river](images/river.png)
+![flood](images/flood.png)
 ---
 
 ## ★ Tools & Technologies ★
-- **ArcGIS Pro** (Dissolve, Intersect, Field Calculator, Summary Statistics)
-- **Coordinate System**: CA-specific projection
-- **Data Storage**: File Geodatabase
-- **Visualization**: Thematic mapping with classification
+- **ArcGIS CityEngine** → 3D city and terrain modeling  
+- **Unity Engine** → Interactive flood simulation and visualization  
+- **GIS Data Sources** → Elevation models, building footprints, and hydrological datasets  
 
 ---
 
-## ★ Results ★
-- Produced a **county-level wildfire impact map** showing percentage of land affected (2012–2022).
-- Identified high-impact counties for **emergency management prioritization**.
-- Created reusable geoprocessing workflow for similar spatial analyses.
+## ★ Outcomes & Impact ★
+- Delivered a **simulation environment** that showed how floods impact specific areas of Frederick County.  
+- Enabled **county officials** to better identify **vulnerable neighborhoods, roads, and infrastructure**.  
+- Improved **communication with the public and stakeholders** through realistic 3D visualizations.  
+- Provided a framework for **data-driven planning** and **emergency preparedness**.  
 
 ---
 
-## ★ Project Files ★
-- 📄 [Download Project Map PDF](./electoral_politics.pdf)  
-  *(Contains the final thematic wildfire impact map for California counties)*
+## ★ Future Applications ★
+- Integration of **real-time rainfall and hydrological models** for predictive flood alerts.  
+- Expansion into **VR/AR environments** for training emergency response teams.  
+- Replication of the workflow for **other counties and natural hazard simulations** (wildfires, earthquakes, etc.).  
 
 ---
+
